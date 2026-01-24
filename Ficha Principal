@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoja de Servicio: Rastreador Kroot (Trinchante)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --kroot-green: #68cc66;
+            --kroot-dark: #0a0a0a;
+            --terminal-green: #4ade80;
+            --alert-red: #f87171;
+            --bg-dark: #111111;
+            --panel-bg: #1a1a1a;
+            --border-color: #4ade80;
+        }
+
+        body {
+            font-family: 'Roboto Condensed', sans-serif;
+            background-color: var(--bg-dark);
+            color: #e5e7eb;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, .stat-value, .tech-font, input.tech-font {
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        .panel {
+            background-color: var(--panel-bg);
+            border: 1px solid #333;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Clean corner markers */
+        .panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 0; height: 0;
+            border-top: 8px solid var(--kroot-green);
+            border-right: 8px solid transparent;
+            z-index: 10;
+        }
+
+        .stat-box {
+            background: #252525;
+            border: 1px solid #444;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+        .stat-box:hover, .stat-box:focus-within {
+            border-color: var(--kroot-green);
+            background: #2a2a2a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .hunger-die {
+            font-size: 2.5rem;
+            font-weight: bold;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+            border: 3px solid var(--terminal-green);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .progress-bar-container {
+            background-color: #333;
+            height: 10px;
+            width: 100%;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: var(--kroot-green);
+            transition: width 0.3s ease;
+        }
+
+        .weapon-card {
+            border-left: 4px solid var(--kroot-green);
+            background: #252525;
+            border-radius: 6px;
+        }
+        
+        details > summary {
+            list-style: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            border-radius: 4px;
+        }
+        details > summary:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        .detail-content {
+            border-top: 1px solid #444;
+            background-color: #151515;
+            padding: 12px;
+            margin-top: 4px;
+            border-radius: 0 0 4px 4px;
+        }
+        
+        input.editable-stat {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid transparent;
+            color: inherit;
+            text-align: center;
+            width: 100%;
+            padding: 2px 0;
+            border-radius: 4px;
+            font-family: 'Share Tech Mono', monospace;
+            transition: all 0.2s;
+        }
+        input.editable-stat:focus {
+            outline: none;
+            background-color: #000;
+            border-color: var(--kroot-green);
+        }
+        input.editable-stat:hover {
+            border-color: #555;
+            background-color: rgba(255, 255, 255, 0.1);
+            cursor: text;
+        }
+
+        /* Checkbox styling */
+        .checkbox-group {
+            display: flex;
+            gap: 4px;
+        }
+        input[type="checkbox"] {
+            appearance: none;
+            background-color: #333;
+            margin: 0;
+            font: inherit;
+            color: currentColor;
+            width: 14px;
+            height: 14px;
+            border: 1px solid #555;
+            border-radius: 2px;
+            display: grid;
+            place-content: center;
+            cursor: pointer;
+        }
+        input[type="checkbox"]::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            transform: scale(0);
+            transition: 120ms transform ease-in-out;
+            box-shadow: inset 1em 1em var(--kroot-green);
+            transform-origin: center;
+            clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+        }
+        input[type="checkbox"]:checked::before {
+            transform: scale(1);
+        }
+        input[type="checkbox"]:checked {
+            border-color: var(--kroot-green);
+        }
+
+        .text-label { color: #9ca3af; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: bold; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 pb-20 bg-[#111]">
+    
+    <!-- Main Container -->
+    <div class="max-w-5xl mx-auto space-y-6">
+
+        <!-- Header -->
+        <header class="panel p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-l-4 border-l-green-500 bg-[#1a1a1a]">
+            <div>
+                <div class="text-xs text-green-400 tracking-[0.2em] uppercase mb-1 font-bold">Hoja de Servicio - Imperial Navy</div>
+                <h1 class="text-4xl md:text-5xl font-bold text-white uppercase tracking-tighter">Rastreador Kroot</h1>
+                <div class="flex flex-wrap gap-2 mt-3">
+                    <span class="px-3 py-1 bg-[#333] text-gray-200 text-xs font-bold rounded">Jauría de Gurk</span>
+                    <span class="px-3 py-1 bg-[#333] text-gray-200 text-xs font-bold rounded">Mercenario Gourmet</span>
+                    <span class="px-3 py-1 bg-[#333] text-gray-200 text-xs font-bold rounded">Tanque Biológico</span>
+                </div>
+            </div>
+            <div class="text-right border-l-4 border-green-600 pl-4 hidden md:block p-2 rounded-r">
+                <div class="text-xs text-gray-400 font-bold uppercase">Misión Actual</div>
+                <div class="text-green-400 font-bold text-lg">Correo de Lady Viraque</div>
+                <div class="text-xs text-gray-300 mt-1">Objetivo: <span class="text-white">Skrag</span> (Bajoz Fondoz)</div>
+            </div>
+        </header>
+
+        <!-- Top Row: Flavor & Vitals -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Flavor Text -->
+            <div class="panel p-6 col-span-1 lg:col-span-2 flex flex-col justify-between">
+                <div>
+                    <h2 class="text-green-400 text-xl mb-3 border-b border-gray-700 pb-2 font-bold"><i class="fas fa-quote-left mr-2"></i>Filosofía y Tabú</h2>
+                    <p class="italic text-gray-300 mb-4 text-sm border-l-2 border-gray-600 pl-3 leading-relaxed">"La nave es un buffet. Tú decides quién llega al postre. Lo que no te mata, te hace más fuerte. Y lo que no está clavado al suelo, es tuyo."</p>
+                </div>
+                
+                <details class="group bg-red-900/10 rounded border border-red-500/30 overflow-hidden">
+                    <summary class="flex justify-between items-center p-3 text-red-400 text-sm font-bold uppercase select-none hover:bg-red-900/20 transition-colors">
+                        <span><i class="fas fa-exclamation-triangle mr-2"></i> El Tabú de Gurk (Regla de Oro)</span>
+                        <i class="fas fa-chevron-down chevron transition-transform duration-200 text-red-400"></i>
+                    </summary>
+                    <div class="detail-content text-sm text-gray-300 p-4 bg-[#151515]">
+                        <p class="mb-2 text-red-300 font-bold">Prohibido terminantemente comer:</p>
+                        <ul class="list-disc list-inside space-y-2 ml-2">
+                            <li><strong class="text-white">Orkos:</strong> Contienen esporas peligrosas.</li>
+                            <li><strong class="text-white">Tiránidos:</strong> Inducen la "hambre maldita".</li>
+                            <li><strong class="text-white">Comida Procesada:</strong> "Ceniza" sin valor nutricional.</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Vitals (Wounds, Fate, etc) -->
+            <div class="panel p-6 flex flex-col justify-between">
+                <div class="flex justify-between items-center mb-4 gap-2">
+                    <div class="text-center w-1/3 group">
+                        <div class="text-label group-hover:text-green-400 mb-1">Heridas</div>
+                        <input type="number" value="12" class="editable-stat text-5xl text-white font-bold h-16">
+                    </div>
+                    <div class="text-center w-1/3 border-l border-r border-gray-700 px-2 group">
+                        <div class="text-label group-hover:text-yellow-400 mb-1">Destino</div>
+                        <input type="number" value="2" class="editable-stat text-5xl text-yellow-400 font-bold h-16">
+                    </div>
+                    <div class="text-center w-1/3 group">
+                        <div class="text-label group-hover:text-blue-400 mb-1">Armadura</div>
+                        <input type="number" value="7" class="editable-stat text-5xl text-blue-400 font-bold h-16">
+                        <div class="text-[10px] text-gray-400 mt-1 font-bold">3 Piel + 4 R</div>
+                    </div>
+                </div>
+                
+                <div class="space-y-2 mt-2">
+                    <div class="flex justify-between text-xs uppercase text-gray-400 font-bold">
+                        <span>Movimiento</span>
+                        <span class="text-green-400">6m / 12m / 18m / 28m</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 60%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Stats Grid -->
+        <div class="panel p-6 rounded-lg">
+            <h2 class="text-green-400 text-2xl mb-5 border-b border-gray-700 pb-2 flex justify-between items-center font-bold">
+                <span><i class="fas fa-chart-bar mr-2"></i>Perfil de Atributos</span>
+            </h2>
+            <div class="grid grid-cols-3 md:grid-cols-9 gap-3">
+                <!-- Stats Loop with Inputs -->
+                <div class="stat-box p-2 rounded text-center group" title="Habilidad de Armas">
+                    <div class="text-label group-hover:text-green-400 mb-1">HA</div>
+                    <input type="number" value="50" class="editable-stat text-3xl text-white font-bold">
+                </div>
+                <div class="stat-box p-2 rounded text-center group" title="Habilidad de Proyectiles">
+                    <div class="text-label group-hover:text-green-400 mb-1">HP</div>
+                    <input type="number" value="35" class="editable-stat text-3xl text-white font-bold">
+                </div>
+                <div class="stat-box p-2 rounded text-center group" title="Fuerza">
+                    <div class="text-label group-hover:text-green-400 mb-1">F</div>
+                    <input type="number" value="40" class="editable-stat text-3xl text-white font-bold">
+                </div>
+                <div class="stat-box p-2 rounded text-center group" title="Resistencia">
+                    <div class="text-label group-hover:text-green-400 mb-1">R</div>
+                    <input type="number" value="40" class="editable-stat text-3xl text-white font-bold">
+                </div>
+                <div class="stat-box p-2 rounded text-center border border-green-600/30 group bg-green-900/10" title="Agilidad">
+                    <div class="text-label text-green-400 font-bold mb-1">AG</div>
+                    <input type="number" value="45" class="editable-stat text-3xl text-green-100 font-bold">
+                </div>
+                <div class="stat-box p-2 rounded text-center border border-green-600/30 group bg-green-900/10" title="Inteligencia">
+                    <div class="text-label text-green-400 font-bold mb-1">INT</div>
+                    <input type="number" value="25" class="editable-stat text-3xl text-green-100 font-bold">
+                </div>
+                <div class="stat-box p-2 rounded text-center border border-green-600/30 group bg-green-900/10" title="Percepción">
+                    <div class="text-label text-green-400 font-bold mb-1">PER</div>
+                    <input type="number" value="50" class="editable-stat text-3xl text-green-100 font-bold">
+                </div>
+                <div class="stat-box p-2 rounded text-center group" title="Voluntad">
+                    <div class="text-label group-hover:text-green-400 mb-1">VOL</div>
+                    <input type="number" value="30" class="editable-stat text-3xl text-white font-bold">
+                </div>
+                <div class="stat-box p-2 rounded text-center opacity-80 group" title="Empatía">
+                    <div class="text-label group-hover:text-green-400 mb-1">EMP</div>
+                    <input type="number" value="20" class="editable-stat text-3xl text-gray-300 font-bold">
+                </div>
+            </div>
+
+            <details class="group mt-4 bg-[#222] border border-gray-700 rounded">
+                <summary class="flex justify-between items-center p-3 text-xs text-gray-300 uppercase font-bold tracking-wider hover:text-white hover:bg-[#333]">
+                    <span><i class="fas fa-info-circle mr-2 text-green-400"></i> Descripción Detallada</span>
+                    <i class="fas fa-chevron-down chevron text-gray-400"></i>
+                </summary>
+                <div class="detail-content grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-gray-300 p-4 leading-relaxed">
+                    <div class="hover:text-white transition-colors"><span class="text-green-400 font-bold text-sm">HA:</span> Letal en combate cercano.</div>
+                    <div class="hover:text-white transition-colors"><span class="text-green-400 font-bold text-sm">PER:</span> Sentidos evolutivos de cazador.</div>
+                    <div class="hover:text-white transition-colors"><span class="text-green-400 font-bold text-sm">AG:</span> Movimientos fluidos y sigilo.</div>
+                    <div class="hover:text-white transition-colors"><span class="text-green-400 font-bold text-sm">F:</span> Fuerza fibrada y brutal.</div>
+                    <div class="hover:text-white transition-colors"><span class="text-green-400 font-bold text-sm">R:</span> Metabolismo de toxinas y carne.</div>
+                    <div class="hover:text-white transition-colors"><span class="text-green-400 font-bold text-sm">HP:</span> Competente con rifles kroot.</div>
+                    <div class="hover:text-white transition-colors"><span class="text-green-400 font-bold text-sm">VOL:</span> Instintos primarios.</div>
+                    <div class="hover:text-white transition-colors"><span class="text-green-400 font-bold text-sm">INT:</span> Pragmático, simple, astuto.</div>
+                    <div class="hover:text-white transition-colors"><span class="text-green-400 font-bold text-sm">EMP:</span> Mentalidad alienígena.</div>
+                </div>
+            </details>
+        </div>
+
+        <!-- Mechanics: Hunger & Assimilation -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <!-- Hunger Mechanic -->
+            <div class="panel p-6 border border-red-900/50 bg-[#151111]">
+                <div class="flex justify-between items-center mb-5">
+                    <h2 class="text-red-400 text-2xl font-bold uppercase"><i class="fas fa-drumstick-bite mr-2"></i>Maldición: Hambre</h2>
+                    <div class="hunger-die text-red-400 border-red-500">
+                        <span id="hungerValue">10</span>
+                    </div>
+                </div>
+                
+                <div class="space-y-3 text-sm mb-5">
+                    <div class="flex items-center justify-between p-2 bg-[#222] rounded border-l-4 border-green-500">
+                        <span class="text-gray-200 font-bold">10-7: Saciado</span>
+                        <span class="text-green-400 text-xs font-mono font-bold uppercase">Óptimo</span>
+                    </div>
+                    <div class="flex items-center justify-between p-2 bg-[#222] rounded border-l-4 border-yellow-500">
+                        <span class="text-gray-200 font-bold">6-4: Hambriento</span>
+                        <span class="text-yellow-400 text-xs font-mono font-bold uppercase">-20 Sigilo</span>
+                    </div>
+                    <div class="flex items-center justify-between p-2 bg-[#222] rounded border-l-4 border-red-500">
+                        <span class="text-gray-200 font-bold">3-1: Voraz</span>
+                        <span class="text-red-400 text-xs font-mono font-bold uppercase">-10 Atq / No Correr</span>
+                    </div>
+                    <div class="flex items-center justify-between p-2 bg-red-900/20 rounded border-l-4 border-red-700">
+                        <span class="text-red-100 font-bold">0: COLAPSO</span>
+                        <span class="text-red-300 text-xs font-mono font-bold uppercase">Locura</span>
+                    </div>
+                </div>
+                
+                <!-- Buttons -->
+                <div class="flex gap-3 mb-4">
+                    <button class="bg-red-900/80 hover:bg-red-800 text-white font-bold text-sm px-4 py-3 rounded flex-1 transition-all border border-red-700 hover:border-red-500" onclick="updateHunger(-1)">
+                        <i class="fas fa-minus mr-2"></i> Desgaste (-1)
+                    </button>
+                    <button class="bg-green-800/80 hover:bg-green-700 text-white font-bold text-sm px-4 py-3 rounded flex-1 transition-all border border-green-600 hover:border-green-400" onclick="updateHunger(1)">
+                        <i class="fas fa-plus mr-2"></i> Snack (+1)
+                    </button>
+                </div>
+
+                <!-- Dropdown: Genetic Assimilation -->
+                <details class="group bg-[#222] rounded border border-gray-700">
+                    <summary class="flex justify-between items-center p-3 text-xs text-gray-200 uppercase font-bold hover:bg-[#333]">
+                        <span><i class="fas fa-dna mr-2 text-purple-400"></i> El Rito: Asimilación (Comer)</span>
+                        <i class="fas fa-chevron-down chevron text-gray-400"></i>
+                    </summary>
+                    <div class="detail-content text-xs text-gray-300 space-y-3 p-4">
+                        <p><strong>Acción:</strong> Completa (Comer cadáver fresco).</p>
+                        <p><strong>Efecto Base:</strong> Recuperas +5 al Dado de Hambre.</p>
+                        <div class="border-t border-gray-600 pt-2 mt-2">
+                            <strong class="block mb-2 text-white uppercase">Tirada de Evolución (1d10):</strong>
+                            <ul class="space-y-2 ml-2">
+                                <li class="flex gap-2"><span class="text-red-400 font-bold font-mono min-w-[30px]">1</span> <span>Vómito. No recuperas Hambre. Fatiga.</span></li>
+                                <li class="flex gap-2"><span class="text-yellow-400 font-bold font-mono min-w-[30px]">2-3</span> <span>Indigestión. -10 siguiente acción.</span></li>
+                                <li class="flex gap-2"><span class="text-green-400 font-bold font-mono min-w-[30px]">4-6</span> <span>Nutrición. Curas 1d5 Heridas.</span></li>
+                                <li class="flex gap-2"><span class="text-blue-400 font-bold font-mono min-w-[30px]">7-8</span> <span>Buff Temp (ej: +10 F) x1 Combate.</span></li>
+                                <li class="flex gap-2"><span class="text-purple-400 font-bold font-mono min-w-[30px]">9+</span> <span>ASIMILACIÓN PERMANENTE.</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Active Ability: Tactical Tasting -->
+            <div class="panel p-6 flex flex-col bg-blue-900/5 border border-blue-900/30">
+                <h2 class="text-blue-400 text-2xl mb-4 font-bold"><i class="fas fa-tongue mr-2"></i>Cata de Combate</h2>
+                <div class="bg-[#1a1a1a] p-3 rounded border-l-4 border-green-500 mb-4">
+                     <p class="text-sm text-gray-200 font-bold">EFECTO ACTIVO:</p>
+                     <p class="text-green-400 font-mono text-lg font-bold">+10 Impactar / +2 Daño</p>
+                     <p class="text-xs text-gray-400 mt-1">Contra el enemigo probado.</p>
+                </div>
+                
+                <div class="bg-[#222] p-4 rounded text-xs space-y-2 font-mono border border-gray-700 mb-3">
+                    <div class="font-bold text-gray-300 mb-2 border-b border-gray-600 pb-1 uppercase tracking-wide">TABLA DE SABORES (1d6)</div>
+                    <div class="grid grid-cols-1 gap-2">
+                        <div class="flex items-center gap-2"><span class="text-blue-400 font-bold min-w-[20px]">1.</span> <span class="text-gray-300">Bilis Ácida (+Esq)</span></div>
+                        <div class="flex items-center gap-2"><span class="text-orange-400 font-bold min-w-[20px]">2.</span> <span class="text-gray-300">Óxido (Ignora 1 AP)</span></div>
+                        <div class="flex items-center gap-2"><span class="text-purple-400 font-bold min-w-[20px]">3.</span> <span class="text-gray-300">Almizcle (+Intimidar)</span></div>
+                        <div class="flex items-center gap-2"><span class="text-green-400 font-bold min-w-[20px]">4.</span> <span class="text-gray-300">Dulzor (+Daño si R)</span></div>
+                        <div class="flex items-center gap-2"><span class="text-yellow-400 font-bold min-w-[20px]">5.</span> <span class="text-gray-300">Estática (Prever Atq)</span></div>
+                        <div class="flex items-center gap-2"><span class="text-red-400 font-bold min-w-[20px]">6.</span> <span class="text-gray-300 font-bold">UMAMI (FRENESÍ)</span></div>
+                    </div>
+                </div>
+
+                <!-- Dropdown: Rules & Risks -->
+                <details class="group bg-[#222] rounded border border-gray-700 mt-auto">
+                    <summary class="flex justify-between items-center p-3 text-xs text-gray-200 uppercase font-bold hover:bg-[#333]">
+                        <span><i class="fas fa-book-medical mr-2"></i> Reglas y Riesgos</span>
+                        <i class="fas fa-chevron-down chevron text-gray-400"></i>
+                    </summary>
+                    <div class="detail-content text-xs text-gray-300 space-y-2 p-4">
+                        <p><strong class="text-white">Coste:</strong> Media Acción (Gratis con "El Tenedor").</p>
+                        <p><strong class="text-white">Requisito:</strong> Rango Melé.</p>
+                        <div class="border-t border-gray-600 pt-2 mt-2">
+                            <strong class="block mb-1 text-red-400 uppercase">Riesgos (Indigestión):</strong>
+                            <ul class="space-y-1 ml-2">
+                                <li><span class="text-yellow-500 font-bold">Energía/Fuego:</span> 1d3 daño lengua.</li>
+                                <li><span class="text-purple-400 font-bold">Tóxicos/Demonios:</span> Resistencia o veneno.</li>
+                                <li><span class="text-gray-400 font-bold">Necrones:</span> "Sabe a pila". Calambrazo.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </div>
+
+        <!-- Combat & Gear -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- Weapons -->
+            <div class="panel p-6 rounded-lg">
+                <h2 class="text-2xl text-white mb-5 border-b border-gray-700 pb-2 font-bold"><i class="fas fa-crosshairs mr-2"></i>Armamento</h2>
+                
+                <!-- Rifle -->
+                <div class="bg-[#252525] p-4 rounded mb-4 weapon-card border-l-green-500 border-l-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-bold text-green-400 text-xl tracking-tight">Rifle Kroot (Dual)</span>
+                        <span class="text-[10px] bg-[#333] px-2 py-1 rounded text-white uppercase font-bold border border-gray-600">Fiable</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 gap-3 text-sm text-gray-200">
+                        <div class="bg-[#1a1a1a] p-3 rounded flex justify-between items-center border border-gray-700">
+                            <div>
+                                <span class="text-blue-400 font-bold text-xs block uppercase">MODO DISTANCIA (Pulso)</span>
+                                <span class="text-xs text-gray-400">Alcance: 100m</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="block font-mono text-lg font-bold text-white">1d10+5 <span class="text-blue-400">(E)</span></span>
+                                <span class="text-xs text-gray-400 font-bold">Pen: 1</span>
+                            </div>
+                        </div>
+                        <div class="bg-[#1a1a1a] p-3 rounded flex justify-between items-center border border-gray-700">
+                            <div>
+                                <span class="text-red-400 font-bold text-xs block uppercase">MODO MELÉ (Cuchillas)</span>
+                                <span class="text-xs text-gray-400">Usa HA (50)</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="block font-mono text-lg font-bold text-white">1d10+4 <span class="text-red-400">(R)</span></span>
+                                <span class="text-xs text-gray-400 font-bold">Pen: 0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Daga Sierra -->
+                <div class="bg-[#252525] p-4 rounded mb-4 weapon-card border-l-yellow-600 border-l-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-bold text-yellow-500 text-xl tracking-tight">Daga Sierra "Destripadora"</span>
+                        <span class="text-[10px] bg-[#333] px-2 py-1 rounded text-white uppercase font-bold border border-gray-600">Desgarradora</span>
+                    </div>
+                    
+                    <div class="bg-[#1a1a1a] p-3 rounded flex justify-between items-center border border-gray-700 mb-3">
+                        <div>
+                            <span class="text-xs text-gray-300 font-bold uppercase">Melé (Sierra)</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="block font-mono text-lg font-bold text-white">1d10+1+BF <span class="text-yellow-500">(R)</span></span>
+                            <span class="text-xs text-gray-400 font-bold">Pen: 2 | Tira 2d10 Daño</span>
+                        </div>
+                    </div>
+                    
+                    <details class="group mt-2">
+                        <summary class="text-xs text-gray-300 font-bold cursor-pointer hover:text-white flex items-center p-2 rounded hover:bg-[#333]">
+                            <i class="fas fa-caret-right mr-2 transition-transform group-open:rotate-90 text-yellow-500"></i> Propiedades Especiales
+                        </summary>
+                        <div class="text-xs text-gray-300 mt-2 pl-4 space-y-2 border-l border-gray-700">
+                            <p><strong class="text-white">Desgarradora:</strong> Tira 2 dados de daño y elige el más alto.</p>
+                            <p><strong class="text-white">Equilibrada:</strong> +10 a Parada.</p>
+                            <p><strong class="text-red-400">Ruidosa:</strong> -20 a Sigilo cuando está encendida.</p>
+                            <p><strong class="text-blue-400">Canalizador:</strong> Activa "Cata" gratis si hiere.</p>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Knife -->
+                <div class="bg-[#252525] p-4 rounded weapon-card border-l-red-500 border-l-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-bold text-red-400 text-xl tracking-tight">Cuchillo "El Tenedor"</span>
+                        <span class="text-[10px] bg-[#333] px-2 py-1 rounded text-white uppercase font-bold border border-gray-600">Mono-filo</span>
+                    </div>
+                    
+                    <div class="bg-[#1a1a1a] p-3 rounded flex justify-between items-center border border-gray-700 mb-3">
+                        <div>
+                            <span class="text-xs text-gray-300 font-bold uppercase">Melé / Arrojadiza (5m)</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="block font-mono text-lg font-bold text-white">1d5+4 <span class="text-red-400">(R)</span></span>
+                            <span class="text-xs text-gray-400 font-bold">Pen: 2</span>
+                        </div>
+                    </div>
+                    
+                    <details class="group mt-2">
+                        <summary class="text-xs text-gray-300 font-bold cursor-pointer hover:text-white flex items-center p-2 rounded hover:bg-[#333]">
+                            <i class="fas fa-caret-right mr-2 transition-transform group-open:rotate-90 text-red-400"></i> Propiedades Especiales
+                        </summary>
+                        <div class="text-xs text-gray-300 mt-2 pl-4 space-y-2 border-l border-gray-700">
+                            <p><strong class="text-white">Canalizador:</strong> Si causas 1+ herida, "Cata de Combate" es Acción Gratuita.</p>
+                            <p><strong class="text-white">Herramienta:</strong> +10 a Supervivencia/Medicina para despiezar.</p>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Combo: Gran Trinchante -->
+                <div class="bg-[#1a1a10] p-4 rounded mt-4 border border-orange-900/50">
+                    <div class="flex justify-between items-center mb-3">
+                        <h2 class="text-orange-400 text-lg font-bold uppercase tracking-tight"><i class="fas fa-utensils mr-2"></i>Protocolo: Gran Trinchante</h2>
+                        <span class="text-[10px] bg-orange-900/30 text-orange-200 px-2 py-1 rounded border border-orange-700">Combo 2 Armas</span>
+                    </div>
+                    <div class="text-xs text-gray-300 space-y-3">
+                        <p class="border-b border-orange-900/30 pb-2"><strong>Acción Completa:</strong> Atacar con Daga Sierra (Mano A) + Tenedor (Mano B).</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-[#222] p-3 rounded border border-gray-700 relative">
+                                <div class="absolute -top-2 -left-2 bg-gray-700 text-white text-[10px] px-2 rounded-full font-bold">1</div>
+                                <h3 class="text-green-400 font-bold mb-1">Ataque Inicial (Sierra)</h3>
+                                <p><strong>Tirada:</strong> HA -10 (40).</p>
+                                <p class="text-yellow-500 mt-2 italic border-t border-gray-600 pt-1">Si causa daño &rarr; ACTIVA CATA DE COMBATE GRATIS.</p>
+                            </div>
+                            
+                            <div class="bg-[#222] p-3 rounded border border-gray-700 relative">
+                                 <div class="absolute -top-2 -left-2 bg-gray-700 text-white text-[10px] px-2 rounded-full font-bold">2</div>
+                                <h3 class="text-red-400 font-bold mb-1">Ataque Secundario (Tenedor)</h3>
+                                <p><strong>Tirada:</strong> HA Normal (50).</p>
+                                <p class="text-[10px] text-gray-500">(El +10 de Cata anula el -10 de dual).</p>
+                                <p class="text-green-400 mt-2 font-bold border-t border-gray-600 pt-1">BONO: +2 Daño Automático.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Talents, Inventory & EVOLUTION LOG -->
+            <div class="space-y-6">
+                
+                <!-- Talents List -->
+                <div class="panel p-6 rounded-lg">
+                    <h2 class="text-xl text-white mb-4 border-b border-gray-700 pb-2 font-bold"><i class="fas fa-bolt mr-2"></i>Talentos y Habilidades</h2>
+                    <div class="space-y-2">
+                        
+                        <details class="group bg-[#222] rounded border border-gray-700">
+                            <summary class="flex justify-between items-center p-3 text-xs font-bold text-green-400 cursor-pointer hover:bg-[#333]">
+                                <span>SIGILO (+10)</span>
+                                <i class="fas fa-chevron-down chevron text-gray-400"></i>
+                            </summary>
+                            <div class="detail-content text-xs text-gray-300 p-3">
+                                Te mueves en silencio absoluto. Eres el rey de los conductos. Tu base para tiradas de Sigilo es 55.
+                            </div>
+                        </details>
+
+                        <details class="group bg-[#222] rounded border border-gray-700">
+                            <summary class="flex justify-between items-center p-3 text-xs font-bold text-green-400 cursor-pointer hover:bg-[#333]">
+                                <span>SALTO ANTINATURAL</span>
+                                <i class="fas fa-chevron-down chevron text-gray-400"></i>
+                            </summary>
+                            <div class="detail-content text-xs text-gray-300 p-3">
+                                Tus piernas musculadas te permiten saltar el doble de la distancia normal calculada por tu atributo de Fuerza.
+                            </div>
+                        </details>
+
+                        <details class="group bg-[#222] rounded border border-gray-700">
+                            <summary class="flex justify-between items-center p-3 text-xs font-bold text-green-400 cursor-pointer hover:bg-[#333]">
+                                <span>SENTIDOS AGUDOS</span>
+                                <i class="fas fa-chevron-down chevron text-gray-400"></i>
+                            </summary>
+                            <div class="detail-content text-xs text-gray-300 p-3">
+                                Usas el olfato y el oído para detectar enemigos invisibles o escondidos. Reduce penalizadores por oscuridad.
+                            </div>
+                        </details>
+
+                        <details class="group bg-red-900/10 rounded border border-red-500/30">
+                            <summary class="flex justify-between items-center p-3 text-xs font-bold text-red-400 cursor-pointer hover:bg-red-900/20">
+                                <span>FRENESÍ</span>
+                                <i class="fas fa-chevron-down chevron text-red-400"></i>
+                            </summary>
+                            <div class="detail-content text-xs text-gray-300 p-3">
+                                <p>Puedes entrar en rabia asesina (Acción Gratuita).</p>
+                                <ul class="list-disc ml-4 mt-2 space-y-1">
+                                    <li><strong class="text-white">Bonus:</strong> +10 HA, +Daño Físico, +10 Voluntad, Inmune a Miedo.</li>
+                                    <li><strong class="text-white">Restricción:</strong> Debes cargar/atacar al enemigo más cercano. No puedes hacer Paradas ni retirarte.</li>
+                                </ul>
+                            </div>
+                        </details>
+
+                        <details class="group bg-[#222] rounded border border-gray-700">
+                            <summary class="flex justify-between items-center p-3 text-xs font-bold text-white cursor-pointer hover:bg-[#333]">
+                                <span>COMBATE DOS ARMAS</span>
+                                <i class="fas fa-chevron-down chevron text-gray-400"></i>
+                            </summary>
+                            <div class="detail-content text-xs text-gray-300 p-3">
+                                Al equipar dos armas, puedes usar una <strong>Acción Completa</strong> para atacar con ambas. Sufres un penalizador de -10 a ambas tiradas.
+                            </div>
+                        </details>
+
+                        <details class="group bg-yellow-900/10 rounded border border-yellow-500/30">
+                            <summary class="flex justify-between items-center p-3 text-xs font-bold text-yellow-400 cursor-pointer hover:bg-yellow-900/20">
+                                <span>VICIO: CLEPTOMANÍA</span>
+                                <i class="fas fa-chevron-down chevron text-yellow-500"></i>
+                            </summary>
+                            <div class="detail-content text-xs text-gray-300 p-3">
+                                <p>Si ves bolsillos, metes la mano.</p>
+                                <ul class="list-disc ml-4 mt-2 space-y-1">
+                                    <li><strong class="text-white">Restricción:</strong> Solo 2 intentos por Escena.</li>
+                                    <li><strong class="text-white">Tirada:</strong> Agilidad (45) o Sigilo (55) si escondido.</li>
+                                </ul>
+                            </div>
+                        </details>
+
+                    </div>
+                </div>
+
+                <!-- Dice Command Center -->
+                <div class="panel p-6 rounded-lg bg-[#1a1a1a] border border-[#333]">
+                    <h2 class="text-lg text-white mb-4 border-b border-gray-700 pb-2 font-bold flex items-center justify-between">
+                        <span><i class="fas fa-dice mr-2"></i>Centro de Mando de Dados</span>
+                        <span id="last-roll-result" class="text-green-400 font-mono text-xl">--</span>
+                    </h2>
+                    
+                    <div class="grid grid-cols-4 gap-2">
+                        <button onclick="rollDice(100)" class="flex flex-col items-center justify-center p-2 bg-[#252525] hover:bg-[#333] border border-[#444] rounded transition-all group">
+                            <span class="text-xs text-gray-400 font-bold mb-1 group-hover:text-green-400">d100</span>
+                            <i class="fas fa-dice-d20 text-xl text-gray-500 group-hover:text-white"></i>
+                        </button>
+                        <button onclick="rollDice(20)" class="flex flex-col items-center justify-center p-2 bg-[#252525] hover:bg-[#333] border border-[#444] rounded transition-all group">
+                            <span class="text-xs text-gray-400 font-bold mb-1 group-hover:text-yellow-400">d20</span>
+                            <i class="fas fa-dice-d20 text-xl text-gray-500 group-hover:text-white"></i>
+                        </button>
+                        <button onclick="rollDice(10)" class="flex flex-col items-center justify-center p-2 bg-[#252525] hover:bg-[#333] border border-[#444] rounded transition-all group">
+                            <span class="text-xs text-gray-400 font-bold mb-1 group-hover:text-blue-400">d10</span>
+                            <i class="fas fa-dice-d6 text-xl text-gray-500 group-hover:text-white transform rotate-45"></i>
+                        </button>
+                        <button onclick="rollDice(6)" class="flex flex-col items-center justify-center p-2 bg-[#252525] hover:bg-[#333] border border-[#444] rounded transition-all group">
+                            <span class="text-xs text-gray-400 font-bold mb-1 group-hover:text-red-400">d6</span>
+                            <i class="fas fa-dice-six text-xl text-gray-500 group-hover:text-white"></i>
+                        </button>
+                    </div>
+                    <div class="mt-2 text-[10px] text-gray-500 text-center font-mono">
+                        Haga clic para tirar. Resultado arriba.
+                    </div>
+                </div>
+
+                <!-- Evolution History (Detailed) -->
+                <div class="panel p-6 rounded-lg bg-purple-900/5 border border-purple-500/30">
+                    <h2 class="text-lg text-purple-300 mb-4 border-b border-purple-500/30 pb-2 font-bold"><i class="fas fa-dna mr-2"></i>Historial de Evolución</h2>
+                    
+                    <!-- Temporary Buffs -->
+                    <div class="mb-5">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Buffs Temporales (1 Combate)</h3>
+                            <button onclick="addEvolution('temp')" class="text-xs bg-[#333] hover:bg-[#444] text-green-400 font-bold px-3 py-1 rounded border border-gray-600 transition-colors shadow-sm" title="Añadir Buff">
+                                <i class="fas fa-plus"></i> AÑADIR
+                            </button>
+                        </div>
+                        <ul id="temp-evo-list" class="space-y-2 text-sm text-gray-200 min-h-[20px]">
+                            <!-- Frenesi Menor Detail -->
+                            <li class="bg-[#222] p-2 rounded border border-gray-600 animate-[fadeIn_0.3s_ease-in-out]">
+                                <details class="group">
+                                    <summary class="flex justify-between items-center cursor-pointer list-none">
+                                        <div class="flex items-center gap-2">
+                                            <i class="fas fa-bolt text-green-400"></i>
+                                            <span class="text-green-300 font-bold">Frenesí Menor (Reactivo)</span>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <i class="fas fa-chevron-down chevron text-gray-500 text-xs transition-transform group-open:rotate-180"></i>
+                                            <button onclick="this.closest('li').remove()" class="text-red-400 hover:text-red-300 ml-2 bg-[#333] px-2 rounded border border-red-900 transition-colors">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </summary>
+                                    <div class="text-xs text-gray-300 mt-2 pl-2 border-l border-green-500/30 space-y-1 pt-1">
+                                        <p>Si recibes daño, obtienes <strong>+5 HA</strong> en tu siguiente ataque.</p>
+                                        <p class="italic text-gray-500">(1 uso por combate).</p>
+                                    </div>
+                                </details>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Permanent Assimilations -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Asimilaciones Permanentes</h3>
+                            <button onclick="addEvolution('perm')" class="text-xs bg-[#333] hover:bg-[#444] text-purple-400 font-bold px-3 py-1 rounded border border-gray-600 transition-colors shadow-sm" title="Añadir Habilidad">
+                                <i class="fas fa-plus"></i> AÑADIR
+                            </button>
+                        </div>
+                        <ul id="perm-evo-list" class="space-y-2 text-sm text-purple-200 min-h-[20px]">
+                            <!-- Agilidad Detail -->
+                            <li class="bg-[#222] p-2 rounded border border-gray-600 animate-[fadeIn_0.3s_ease-in-out]">
+                                <details class="group">
+                                    <summary class="flex justify-between items-center cursor-pointer list-none">
+                                        <div class="flex items-center gap-2">
+                                            <i class="fas fa-angle-double-up text-purple-400"></i>
+                                            <span class="text-purple-300 font-bold">Mejora: +5 Agilidad Base</span>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <i class="fas fa-chevron-down chevron text-gray-500 text-xs transition-transform group-open:rotate-180"></i>
+                                            <button onclick="this.closest('li').remove()" class="text-red-400 hover:text-red-300 ml-2 bg-[#333] px-2 rounded border border-red-900 transition-colors">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </summary>
+                                    <div class="text-xs text-gray-300 mt-2 pl-2 border-l border-purple-500/30 pt-1">
+                                        <p>Mejora genética permanente. Tus reflejos y velocidad de movimiento base han aumentado.</p>
+                                    </div>
+                                </details>
+                            </li>
+                            
+                            <!-- Movimiento Ágil DETAIL -->
+                            <li class="bg-[#222] p-2 rounded border border-gray-600 animate-[fadeIn_0.3s_ease-in-out]">
+                                <details class="group">
+                                    <summary class="flex justify-between items-center cursor-pointer list-none">
+                                        <div class="flex items-center gap-2">
+                                            <i class="fas fa-running text-purple-400"></i>
+                                            <span class="text-purple-300 font-bold">Movimiento Ágil (Habilidad)</span>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <i class="fas fa-chevron-down chevron text-gray-500 text-xs transition-transform group-open:rotate-180"></i>
+                                            <button onclick="this.closest('li').remove()" class="text-red-400 hover:text-red-300 ml-2 bg-[#333] px-2 rounded border border-red-900 transition-colors">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </summary>
+                                    <div class="text-xs text-gray-300 mt-2 pl-2 border-l border-purple-500/30 space-y-2 pt-1">
+                                        <p class="italic text-gray-400">Función: Reducir penalizadores por terreno difícil (conductos, escombros).</p>
+                                        <ul class="list-disc ml-4 space-y-1">
+                                            <li><strong class="text-white">Velocidad:</strong> Ignora la reducción a la mitad de movimiento en terreno difícil.</li>
+                                            <li><strong class="text-white">Carga/Carrera:</strong> No necesitas tirar Agilidad para no tropezar al correr/cargar en terreno difícil.</li>
+                                            <li><strong class="text-white">Combate:</strong> Ignora el -10 a Esquivar y HA por terreno inestable.</li>
+                                            <li><strong class="text-white">Sigilo:</strong> Te mueves sin hacer ruidos accidentales por el entorno.</li>
+                                        </ul>
+                                    </div>
+                                </details>
+                            </li>
+
+                            <!-- Resistencia Toxinas Detail -->
+                            <li class="bg-[#222] p-2 rounded border border-gray-600 animate-[fadeIn_0.3s_ease-in-out]">
+                                <details class="group">
+                                    <summary class="flex justify-between items-center cursor-pointer list-none">
+                                        <div class="flex items-center gap-2">
+                                            <i class="fas fa-skull-crossbones text-purple-400"></i>
+                                            <span class="text-purple-300 font-bold">Resistencia Toxinas (+10)</span>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <i class="fas fa-chevron-down chevron text-gray-500 text-xs transition-transform group-open:rotate-180"></i>
+                                            <button onclick="this.closest('li').remove()" class="text-red-400 hover:text-red-300 ml-2 bg-[#333] px-2 rounded border border-red-900 transition-colors">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </summary>
+                                    <div class="text-xs text-gray-300 mt-2 pl-2 border-l border-purple-500/30 pt-1">
+                                        <p>Tu metabolismo procesa venenos y enfermedades con mayor eficacia. +10 a todas las pruebas de Resistencia contra toxinas.</p>
+                                    </div>
+                                </details>
+                            </li>
+
+                            <!-- Olfato Detail -->
+                            <li class="bg-[#222] p-2 rounded border border-gray-600 animate-[fadeIn_0.3s_ease-in-out]">
+                                <details class="group">
+                                    <summary class="flex justify-between items-center cursor-pointer list-none">
+                                        <div class="flex items-center gap-2">
+                                            <i class="fas fa-dog text-purple-400"></i>
+                                            <span class="text-purple-300 font-bold">Olfato Desarrollado (+10 PER)</span>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <i class="fas fa-chevron-down chevron text-gray-500 text-xs transition-transform group-open:rotate-180"></i>
+                                            <button onclick="this.closest('li').remove()" class="text-red-400 hover:text-red-300 ml-2 bg-[#333] px-2 rounded border border-red-900 transition-colors">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </summary>
+                                    <div class="text-xs text-gray-300 mt-2 pl-2 border-l border-purple-500/30 pt-1">
+                                        <p>Adaptación de rata de alcantarilla. Obtienes un <strong>+10 a Percepción</strong> en cualquier tirada que involucre el sentido del olfato (rastreo, detectar emboscadas, etc).</p>
+                                    </div>
+                                </details>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Inventory Detailed (Updated with Checkboxes) -->
+                <div class="panel p-6 rounded-lg">
+                    <h2 class="text-xl text-white mb-4 border-b border-gray-700 pb-2 font-bold"><i class="fas fa-briefcase mr-2"></i>Bolsa de Snacks (Inventario)</h2>
+                    <div class="space-y-3">
+                        
+                        <details class="group border-b border-gray-700 pb-2">
+                            <summary class="flex justify-between text-xs cursor-pointer hover:text-green-400 items-center py-1 font-bold text-gray-300">
+                                <div class="flex items-center gap-2">
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" title="Usar ración 1">
+                                        <input type="checkbox" title="Usar ración 2">
+                                        <input type="checkbox" title="Usar ración 3">
+                                    </div>
+                                    <span>Cecina de Snotling</span>
+                                </div>
+                                <span class="text-green-400 font-mono">Cura 1d5 Heridas</span>
+                            </summary>
+                            <div class="text-xs text-gray-400 pl-24 pt-2 italic">
+                                Carne seca y correosa. Sabe a pollo viejo. +3 Hambre.
+                            </div>
+                        </details>
+
+                        <details class="group border-b border-gray-700 pb-2">
+                            <summary class="flex justify-between text-xs cursor-pointer hover:text-green-400 items-center py-1 font-bold text-gray-300">
+                                <div class="flex items-center gap-2">
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" title="Usar ración 1">
+                                        <input type="checkbox" title="Usar ración 2">
+                                        <input type="checkbox" title="Usar ración 3">
+                                    </div>
+                                    <span>Barrita Orka</span>
+                                </div>
+                                <span class="text-green-400 font-mono">+10 F (3 Turnos)</span>
+                            </summary>
+                            <div class="text-xs text-gray-400 pl-24 pt-2 italic">
+                                Proteína pura y brutalidad concentrada. +3 Hambre.
+                            </div>
+                        </details>
+
+                        <details class="group border-b border-gray-700 pb-2">
+                            <summary class="flex justify-between text-xs cursor-pointer hover:text-green-400 items-center py-1 font-bold text-gray-300">
+                                <div class="flex items-center gap-2">
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" title="Usar ración 1">
+                                        <input type="checkbox" title="Usar ración 2">
+                                        <input type="checkbox" title="Usar ración 3">
+                                    </div>
+                                    <span>Gelatina Ocular</span>
+                                </div>
+                                <span class="text-green-400 font-mono">Visión Nocturna</span>
+                            </summary>
+                            <div class="text-xs text-gray-400 pl-24 pt-2 italic">
+                                Otorga visión nocturna y +10 Percepción durante 1 Escena. +3 Hambre.
+                            </div>
+                        </details>
+
+                        <details class="group border-b border-gray-700 pb-2">
+                            <summary class="flex justify-between text-xs cursor-pointer hover:text-green-400 items-center py-1 font-bold text-gray-300">
+                                <div class="flex items-center gap-2">
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" title="Usar ración 1">
+                                        <input type="checkbox" title="Usar ración 2">
+                                        <input type="checkbox" title="Usar ración 3">
+                                    </div>
+                                    <span>Polvo de Hueso Kin</span>
+                                </div>
+                                <span class="text-green-400 font-mono">+2 Armadura</span>
+                            </summary>
+                            <div class="text-xs text-gray-400 pl-24 pt-2 italic">
+                                Ritual de fortalecimiento. +2 AP durante 1 Escena. +3 Hambre.
+                            </div>
+                        </details>
+
+                         <details class="group border-b border-gray-700 pb-2">
+                            <summary class="flex justify-between text-xs cursor-pointer hover:text-purple-400 items-center py-1 font-bold text-purple-300">
+                                <div class="flex items-center gap-2">
+                                    <input type="checkbox" title="Usar vial">
+                                    <span>Vial: Furia Rosa</span>
+                                </div>
+                                <span class="text-purple-400 font-mono">+20 HA y Fuerza</span>
+                            </summary>
+                            <div class="text-xs text-gray-400 pl-8 pt-2">
+                                Droga de combate (Viraque). Dura 1d10 turnos. <br>
+                                <span class="text-red-400 font-bold">Coste:</span> Frenesí Obligatorio y sufres 1d5 Daño al terminar.
+                            </div>
+                        </details>
+
+                        <details class="group">
+                            <summary class="flex justify-between text-xs cursor-pointer hover:text-purple-400 items-center py-1 font-bold text-purple-300">
+                                <div class="flex items-center gap-2">
+                                    <input type="checkbox" title="Usar vial">
+                                    <span>Vial: Piel de Espejo</span>
+                                </div>
+                                <span class="text-purple-400 font-mono">-30 a ser impactado</span>
+                            </summary>
+                            <div class="text-xs text-gray-400 pl-8 pt-2">
+                                La piel se vuelve reflectante. <br>
+                                <span class="text-red-400 font-bold">Coste:</span> Sufres 1 Herida Automática por turno (tu piel arde).
+                            </div>
+                        </details>
+
+                    </div>
+                </div>
+
+                <!-- Dungeon Loot -->
+                <div class="panel p-6 rounded-lg mt-6">
+                    <h2 class="text-xl text-white mb-4 border-b border-gray-700 pb-2 font-bold"><i class="fas fa-box-open mr-2"></i>Botín de Mazmorra</h2>
+                    <div class="space-y-3">
+                        
+                        <!-- Bocadillo -->
+                        <details class="group border-b border-gray-700 pb-2">
+                            <summary class="flex justify-between text-xs cursor-pointer hover:text-orange-400 items-center py-1 font-bold text-gray-300">
+                                <div class="flex items-center gap-2">
+                                    <input type="checkbox" title="Consumir">
+                                    <span>Bocadillo de Moho</span>
+                                </div>
+                                <span class="text-orange-400 font-mono">+1 Herida / +2 Hambre</span>
+                            </summary>
+                            <div class="text-xs text-gray-400 pl-8 pt-2 italic">
+                                Pan duro con hongos. Un manjar en tiempos desesperados.
+                            </div>
+                        </details>
+
+                        <!-- Vendas -->
+                        <details class="group border-b border-gray-700 pb-2">
+                            <summary class="flex justify-between text-xs cursor-pointer hover:text-blue-400 items-center py-1 font-bold text-gray-300">
+                                <div class="flex items-center gap-2">
+                                    <input type="checkbox" title="Usar">
+                                    <span>Vendas Estériles</span>
+                                </div>
+                                <span class="text-blue-400 font-mono">+20 Medicina / +1d5 Curación</span>
+                            </summary>
+                            <div class="text-xs text-gray-400 pl-8 pt-2">
+                                Tiras de gasa del Dept. Munitorum con coagulante químico.
+                                <br><span class="text-white">Uso:</span> Gasta al hacer Primeros Auxilios. Otorga +20 al test y cura 1d5 extra.
+                            </div>
+                        </details>
+
+                        <!-- Licor -->
+                        <details class="group border-b border-gray-700 pb-2">
+                            <summary class="flex justify-between text-xs cursor-pointer hover:text-green-400 items-center py-1 font-bold text-gray-300">
+                                <div class="flex items-center gap-2">
+                                    <input type="checkbox" title="Consumir/Lanzar">
+                                    <span>Licor de Hongo</span>
+                                </div>
+                                <span class="text-green-400 font-mono">Molotov o Buff/Veneno</span>
+                            </summary>
+                            <div class="text-xs text-gray-400 pl-8 pt-2 space-y-1">
+                                <p>Líquido verde y burbujeante.</p>
+                                <ul class="list-disc ml-4">
+                                    <li><strong class="text-red-400">Lanzar:</strong> Como granada incendiaria (1d10 Fuego, Blast 2).</li>
+                                    <li><strong class="text-green-400">Beber (1d100):</strong>
+                                        <ul class="list-none ml-2 text-[10px]">
+                                            <li><span class="text-white">01-40:</span> Vigor Orko (+10 R, Sin Dolor, -10 Int).</li>
+                                            <li><span class="text-yellow-400">41-80:</span> Ceguera (1d10 rondas).</li>
+                                            <li><span class="text-red-500">81-100:</span> 1d5 Daño directo y KO.</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </details>
+
+                        <!-- Rata -->
+                        <details class="group">
+                            <summary class="flex justify-between text-xs cursor-pointer hover:text-gray-100 items-center py-1 font-bold text-gray-400">
+                                <div class="flex items-center gap-2">
+                                    <input type="checkbox" title="Comer">
+                                    <span>Rata (Media)</span>
+                                </div>
+                                <span class="text-gray-500 font-mono">Comida / Veneno</span>
+                            </summary>
+                            <div class="text-xs text-gray-400 pl-8 pt-2">
+                                Cadáver rígido de alcantarilla.
+                                <br><span class="text-white">Comer:</span> Test de Resistencia.
+                                <ul class="list-disc ml-4 mt-1">
+                                    <li><strong class="text-green-400">Éxito:</strong> Nutrición básica (quita fatiga hambre).</li>
+                                    <li><strong class="text-red-400">Fallo:</strong> Náuseas (-10 a todo) por 1 hora.</li>
+                                </ul>
+                            </div>
+                        </details>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Combat Rules Reference - HIGH CONTRAST -->
+        <div class="panel p-6 rounded-lg mt-6 bg-[#1a1a1a] border-t-4 border-t-green-500">
+            <details class="group">
+                <summary class="flex justify-between items-center cursor-pointer p-2 hover:bg-[#222] rounded">
+                    <h2 class="text-lg text-white font-bold uppercase tracking-wider"><i class="fas fa-book mr-2 text-green-400"></i> Referencia Rápida de Combate</h2>
+                    <i class="fas fa-chevron-down chevron text-white text-xl"></i>
+                </summary>
+                
+                <div class="detail-content mt-4 grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-gray-300 p-4">
+                    <div>
+                        <h3 class="text-green-400 font-bold border-b border-gray-600 mb-3 text-sm uppercase">Economía de Acciones</h3>
+                        <p class="mb-3 text-white">En tu turno eliges: <strong class="text-green-400 bg-[#333] px-1 rounded">1 Acción Completa</strong> O <strong class="text-green-400 bg-[#333] px-1 rounded">2 Medias Acciones</strong>.</p>
+                        
+                        <strong class="text-white block mt-2 mb-1 underline">Medias Acciones:</strong>
+                        <ul class="list-disc ml-4 space-y-1 text-gray-300">
+                            <li><span class="text-green-400 font-bold">Apuntar:</span> +10 al siguiente disparo.</li>
+                            <li><span class="text-green-400 font-bold">Ataque Estándar:</span> Un golpe o disparo.</li>
+                            <li><span class="text-green-400 font-bold">Moverse:</span> Hasta tu velocidad base.</li>
+                            <li><span class="text-green-400 font-bold">Recargar:</span> (Depende del arma).</li>
+                        </ul>
+
+                        <strong class="text-white block mt-3 mb-1 underline">Acciones Completas:</strong>
+                        <ul class="list-disc ml-4 space-y-1 text-gray-300">
+                            <li><span class="text-green-400 font-bold">Apuntar Total:</span> +20 al siguiente disparo.</li>
+                            <li><span class="text-green-400 font-bold">Ataque Total:</span> +20 HA (Melé), pero no puedes esquivar.</li>
+                            <li><span class="text-green-400 font-bold">Cargar:</span> Mueves x3 y atacas con +10 HA.</li>
+                            <li><span class="text-green-400 font-bold">Correr:</span> Mueves x6. Enemigos -20 a dispararte.</li>
+                            <li><span class="text-green-400 font-bold">Ataque Doble:</span> Con dos armas (-10 penalizador).</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-red-400 font-bold border-b border-gray-600 mb-3 text-sm uppercase">Daño y Defensa</h3>
+                        <p class="mb-2"><strong class="text-white">Reacción:</strong> Solo 1 por asalto (Esquivar o Parar).</p>
+                        <div class="bg-[#222] p-2 rounded border border-gray-600 mb-3">
+                            <p class="font-mono text-green-300 font-bold text-center">(Daño + Fijo) - (R + Armadura - Pen) = Heridas</p>
+                        </div>
+                        <ul class="list-disc ml-4 space-y-2 text-gray-300">
+                            <li>La <span class="text-red-400 font-bold bg-[#333] px-1 rounded">Penetración</span> solo reduce Armadura, nunca Resistencia.</li>
+                            <li><span class="text-yellow-400 font-bold bg-[#333] px-1 rounded">Críticos:</span> Si Heridas < 0, daño es acumulativo en tabla de críticos.</li>
+                            <li><span class="text-blue-400 font-bold bg-[#333] px-1 rounded">Cobertura:</span> Ligera (+4 AP), Pesada (+8 AP).</li>
+                        </ul>
+                    </div>
+                </div>
+            </details>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center text-xs text-gray-500 font-mono mt-8 pb-4 uppercase tracking-widest">
+            Imperial Cogitator System // Kroot Mercenary Datasheet // Ver 6.4 Interactive Input
+        </footer>
+
+    </div>
+
+    <script>
+        // Simple Logic for the Hunger Die
+        let hunger = 10;
+        const hungerDisplay = document.getElementById('hungerValue');
+
+        function updateHunger(amount) {
+            hunger += amount;
+            if (hunger > 10) hunger = 10;
+            if (hunger < 0) hunger = 0;
+            
+            hungerDisplay.innerText = hunger;
+            
+            // Visual feedback based on hunger level
+            const dieElement = document.querySelector('.hunger-die');
+            if (hunger >= 7) {
+                dieElement.style.borderColor = '#4ade80'; // Green
+                dieElement.style.boxShadow = '0 0 20px rgba(74, 222, 128, 0.4)';
+                dieElement.classList.remove('text-yellow-400', 'text-red-500');
+                dieElement.classList.add('text-green-400');
+            } else if (hunger >= 4) {
+                dieElement.style.borderColor = '#facc15'; // Yellow
+                dieElement.style.boxShadow = '0 0 20px rgba(250, 204, 21, 0.4)';
+                dieElement.classList.remove('text-green-400', 'text-red-500');
+                dieElement.classList.add('text-yellow-400');
+            } else {
+                dieElement.style.borderColor = '#f87171'; // Red
+                dieElement.style.boxShadow = '0 0 20px rgba(248, 113, 113, 0.6)';
+                dieElement.classList.remove('text-green-400', 'text-yellow-400');
+                dieElement.classList.add('text-red-500');
+            }
+        }
+
+        // Logic for Evolution History
+        function addEvolution(type) {
+            const listId = type === 'temp' ? 'temp-evo-list' : 'perm-evo-list';
+            const list = document.getElementById(listId);
+            
+            // Prompt for Title
+            const title = prompt(type === 'temp' ? "Título del Buff Temporal (ej: Piel Dura):" : "Título de la Asimilación (ej: Alas de Vespid):");
+            if (!title) return; // Exit if cancelled
+
+            // Prompt for Description
+            const description = prompt("Descripción/Efecto detallado:");
+            if (!description) return; // Exit if cancelled
+            
+            const li = document.createElement('li');
+            // Base styles matching existing items
+            li.className = "bg-[#222] p-2 rounded border border-gray-600 animate-[fadeIn_0.3s_ease-in-out]";
+            
+            // Color and Icon coding based on type
+            const titleColor = type === 'temp' ? 'text-green-300' : 'text-purple-300';
+            const iconClass = type === 'temp' ? 'fas fa-bolt text-green-400' : 'fas fa-dna text-purple-400';
+            const borderClass = type === 'temp' ? 'border-green-500/30' : 'border-purple-500/30';
+            
+            li.innerHTML = `
+                <details class="group">
+                    <summary class="flex justify-between items-center cursor-pointer list-none">
+                        <div class="flex items-center gap-2">
+                            <i class="${iconClass}"></i>
+                            <span class="${titleColor} font-bold">${title}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-chevron-down chevron text-gray-500 text-xs transition-transform group-open:rotate-180"></i>
+                            <button onclick="this.closest('li').remove()" class="text-red-400 hover:text-red-300 ml-2 bg-[#333] px-2 rounded border border-red-900 transition-colors">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </summary>
+                    <div class="text-xs text-gray-300 mt-2 pl-2 border-l ${borderClass} space-y-1 pt-1">
+                        <p>${description}</p>
+                    </div>
+                </details>
+            `;
+            list.appendChild(li);
+        }
+
+        // Dice Rolling Logic
+        function rollDice(sides) {
+            const result = Math.floor(Math.random() * sides) + 1;
+            const display = document.getElementById('last-roll-result');
+            
+            // Animation effect
+            let counter = 0;
+            const interval = setInterval(() => {
+                display.innerText = Math.floor(Math.random() * sides) + 1;
+                counter++;
+                if (counter > 10) {
+                    clearInterval(interval);
+                    display.innerText = result;
+                    // Color coding for criticals (d100 logic)
+                    if (sides === 100) {
+                        if (result <= 10) display.className = "text-green-400 font-mono text-xl font-bold animate-pulse";
+                        else if (result >= 90) display.className = "text-red-500 font-mono text-xl font-bold";
+                        else display.className = "text-white font-mono text-xl";
+                    } else {
+                        display.className = "text-white font-mono text-xl";
+                    }
+                }
+            }, 50);
+        }
+    </script>
+</body>
+</html>
