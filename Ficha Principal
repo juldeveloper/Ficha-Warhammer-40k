@@ -17,9 +17,9 @@
             --kroot-dark: #0a0a0a;
             --terminal-green: #4ade80;
             --alert-red: #f87171;
-            --bg-dark: #111111;
-            --panel-bg: #161616;
-            --border-color: #333;
+            --bg-dark: #050505; /* Fondo más oscuro para contraste */
+            --panel-bg: #121212;
+            --border-color: #444; /* Bordes más claros */
             
             /* Rarities */
             --common: #a3a3a3;
@@ -33,8 +33,8 @@
         body {
             font-family: 'Roboto Condensed', sans-serif;
             background-color: var(--bg-dark);
-            color: #d1d5db;
-            background-image: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #0a0a0a 100%);
+            color: #e5e7eb; /* Texto base casi blanco (gray-200) */
+            background-image: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000000 100%);
         }
 
         h1, h2, h3, .stat-value, .tech-font, input.tech-font {
@@ -48,20 +48,21 @@
             border-radius: 4px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8);
             display: flex;
             flex-direction: column;
         }
         
         .panel-header {
-            background: linear-gradient(90deg, #1f1f1f 0%, #161616 100%);
-            border-bottom: 1px solid #333;
+            background: linear-gradient(90deg, #262626 0%, #161616 100%);
+            border-bottom: 1px solid #444;
             padding: 0.5rem 1rem;
             text-transform: uppercase;
             font-size: 0.75rem;
-            color: #888;
+            color: #ffffff; /* ANTES: #9ca3af. AHORA: Blanco puro para encabezados */
             font-weight: bold;
             flex-shrink: 0;
+            letter-spacing: 0.05em;
         }
 
         .panel-content {
@@ -81,13 +82,14 @@
             border-radius: 12px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-shadow: 0 0 10px currentColor;
+            box-shadow: 0 0 10px rgba(74, 222, 128, 0.2);
         }
 
         /* Arrows & Inputs */
         .arrow-btn {
             background: transparent;
             border: none;
-            color: #555;
+            color: #e5e7eb; /* ANTES: #9ca3af. AHORA: Gris casi blanco */
             cursor: pointer;
             transition: all 0.1s;
             display: flex;
@@ -102,22 +104,23 @@
         .editable {
             background: transparent;
             border: none;
-            color: inherit;
+            color: #fff; /* Blanco puro para inputs */
             text-align: center;
             width: 100%;
             font-family: 'Share Tech Mono', monospace;
             appearance: none;
             -moz-appearance: textfield;
+            font-weight: bold;
         }
-        .editable:focus { outline: none; }
+        .editable:focus { outline: none; text-shadow: 0 0 5px rgba(255,255,255,0.5); }
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
         /* GEAR SLOTS */
         .gear-slot {
             width: 50px;
             height: 50px;
-            background-color: #1a1a1a;
-            border: 2px solid #444;
+            background-color: #1f1f1f;
+            border: 2px solid #555;
             border-radius: 4px;
             display: flex;
             align-items: center;
@@ -126,9 +129,9 @@
             transition: all 0.2s;
             position: relative;
         }
-        .gear-slot:hover { border-color: #888; box-shadow: 0 0 10px rgba(255,255,255,0.1); }
+        .gear-slot:hover { border-color: #aaa; box-shadow: 0 0 10px rgba(255,255,255,0.2); }
         .gear-slot.filled { border-color: var(--terminal-green); background-size: cover; }
-        .gear-slot i { font-size: 1.4rem; color: #333; }
+        .gear-slot i { font-size: 1.4rem; color: #9ca3af; } /* ANTES: #6b7280. AHORA: Gris más claro para iconos vacíos */
         
         /* Rarity Borders & Text */
         .gear-slot.rare { border-color: var(--rare); box-shadow: inset 0 0 5px var(--rare); }
@@ -150,8 +153,8 @@
             left: 50%;
             transform: translateX(-50%);
             width: 250px;
-            background: rgba(15, 15, 15, 0.98);
-            border: 1px solid #444;
+            background: #111;
+            border: 1px solid #666;
             padding: 10px;
             z-index: 50;
             display: none;
@@ -159,6 +162,7 @@
             border-radius: 6px;
             font-size: 0.75rem;
             box-shadow: 0 10px 30px rgba(0,0,0,1);
+            color: #eee;
         }
         .gear-slot:hover .item-tooltip { display: block; }
 
@@ -168,19 +172,19 @@
             background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_S2h2i0H9O_XnK_-z-JvXN2d_2Xy5s6tH_g&usqp=CAU'); 
             background-size: cover;
             background-position: center;
-            filter: grayscale(40%) contrast(120%);
-            mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+            filter: grayscale(20%) contrast(110%);
+            mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
             border-radius: 8px;
-            border: 1px solid #222;
+            border: 1px solid #333;
         }
 
         /* Checkbox Custom */
         .kroot-check {
             appearance: none;
-            background-color: #222;
+            background-color: #333;
             width: 14px;
             height: 14px;
-            border: 1px solid #444;
+            border: 1px solid #666;
             display: inline-grid;
             place-content: center;
             cursor: pointer;
@@ -197,67 +201,72 @@
         .kroot-check:checked { border-color: var(--kroot-green); }
 
         /* Details & Summary */
-        details > summary { list-style: none; cursor: pointer; transition: background 0.2s; }
+        details > summary { list-style: none; cursor: pointer; transition: background 0.2s; outline: none; }
         details > summary::-webkit-details-marker { display: none; }
-        details[open] > summary { background-color: rgba(255, 255, 255, 0.05); }
+        details[open] > summary { background-color: rgba(255, 255, 255, 0.1); }
         .detail-content { animation: slideDown 0.2s ease-out; }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Buff Card Styles */
         .buff-card {
-            background: rgba(30, 30, 30, 0.4);
-            border: 1px solid #333;
+            background: rgba(40, 40, 40, 0.6); /* Más claro para leer */
+            border: 1px solid #555;
             border-left-width: 3px;
             border-radius: 4px;
             margin-bottom: 0.5rem;
             transition: all 0.2s;
         }
-        .buff-card:hover { background: rgba(40, 40, 40, 0.6); }
+        .buff-card:hover { background: rgba(60, 60, 60, 0.8); border-color: #777; }
         .buff-green { border-left-color: var(--terminal-green); }
         .buff-purple { border-left-color: #a855f7; }
         .buff-red { border-left-color: #ef4444; }
         .buff-blue { border-left-color: #3b82f6; }
 
         /* RICH TEXT STYLES (Para las descripciones) */
+        .rich-text { color: #f3f4f6; } /* ANTES: #d1d5db. AHORA: Gris 100 (muy claro) */
         .rich-text ul { list-style-type: disc; padding-left: 1.2rem; margin-top: 0.2rem; margin-bottom: 0.2rem; }
         .rich-text ol { list-style-type: decimal; padding-left: 1.2rem; margin-top: 0.2rem; margin-bottom: 0.2rem; }
         .rich-text li { margin-bottom: 2px; }
         .rich-text b, .rich-text strong { color: #fff; font-weight: bold; }
-        .rich-text i, .rich-text em { font-style: italic; }
+        .rich-text i, .rich-text em { font-style: italic; color: #d1d5db; }
         .rich-text u { text-decoration: underline; }
         .rich-text p { margin-bottom: 4px; }
         
-        /* Lore Specific */
-        .lore-header summary { outline: none; }
-
         /* Editor Toolbar */
         .editor-toolbar {
             display: flex;
-            background: #222;
-            border-bottom: 1px solid #444;
+            background: #2a2a2a;
+            border-bottom: 1px solid #555;
             padding: 2px;
         }
         .editor-toolbar button {
-            padding: 2px 6px;
-            font-size: 10px;
-            color: #aaa;
-            border-right: 1px solid #333;
-        }
-        .editor-toolbar button:hover { color: #fff; background: #333; }
-        .editor-content {
-            padding: 4px;
-            min-height: 50px;
-            background: #1a1a1a;
+            padding: 2px 8px;
+            font-size: 11px;
             color: #ccc;
+            border-right: 1px solid #444;
+        }
+        .editor-toolbar button:hover { color: #fff; background: #444; }
+        .editor-content {
+            padding: 6px;
+            min-height: 50px;
+            background: #1f1f1f;
+            color: #eee;
             font-size: 11px;
             outline: none;
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
         }
 
         /* Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #111; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; border: 1px solid #000; }
+        ::-webkit-scrollbar-thumb:hover { background: #666; }
+
+        /* Utilerías de texto */
+        .label-text { color: #e5e7eb; font-size: 10px; font-weight: bold; text-transform: uppercase; } /* ANTES: #9ca3af. AHORA: Gris claro */
+        .val-text { color: #fff; font-weight: bold; }
+        .desc-text { color: #f3f4f6; font-size: 10px; } /* ANTES: #d1d5db. AHORA: Gris claro */
     </style>
 </head>
 <body class="p-2 md:p-6 pb-20 h-screen overflow-hidden flex flex-col">
@@ -265,54 +274,80 @@
     <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-6 h-full">
 
         <!-- HEADER SECTION (AHORA EXPANDIBLE CON LORE) -->
-        <details class="lg:col-span-12 panel border-t-4 border-t-green-600 shrink-0 group lore-header">
-            <summary class="p-4 flex flex-col md:flex-row justify-between items-center cursor-pointer hover:bg-white/5 transition">
+        <details class="lg:col-span-12 panel border-t-4 border-t-green-600 shrink-0 group">
+            <summary class="p-4 flex flex-col md:flex-row justify-between items-center cursor-pointer hover:bg-white/5 transition select-none">
                 <div class="flex items-center gap-4">
-                    <div class="h-16 w-16 bg-cover bg-center rounded border border-gray-600 shadow-inner" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_S2h2i0H9O_XnK_-z-JvXN2d_2Xy5s6tH_g&usqp=CAU'); filter: grayscale(50%);"></div>
+                    <div class="h-16 w-16 bg-cover bg-center rounded border border-gray-500 shadow-inner" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_S2h2i0H9O_XnK_-z-JvXN2d_2Xy5s6tH_g&usqp=CAU'); filter: grayscale(20%);"></div>
                     <div>
                         <h1 class="text-3xl font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                            Rastreador Kroot
-                            <i class="fas fa-chevron-down text-xs text-gray-500 group-open:rotate-180 transition"></i>
+                            Rastreador Kroot 
+                            <i class="fas fa-chevron-down text-xs text-gray-200 group-open:rotate-180 transition"></i>
                         </h1>
-                        <div class="flex gap-2 text-xs font-mono text-gray-400 mt-1">
-                            <span class="bg-[#222] px-2 py-0.5 rounded border border-gray-700">MERCENARIO GOURMET</span>
-                            <span class="bg-[#222] px-2 py-0.5 rounded border border-gray-700">JAURÍA DE GURK</span>
+                        <div class="flex gap-2 text-xs font-mono text-gray-200 mt-1">
+                            <span class="bg-[#333] px-2 py-0.5 rounded border border-gray-600">MERCENARIO GOURMET</span>
+                            <span class="bg-[#333] px-2 py-0.5 rounded border border-gray-600">JAURÍA DE GURK</span>
                         </div>
                     </div>
                 </div>
                 
                 <div class="mt-4 md:mt-0 text-right space-y-1">
-                    <div class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Estado Operativo</div>
-                    <div class="text-xl text-green-500 font-bold font-mono">ANGRYHANDS</div>
-                    <div class="text-xs text-gray-400">Objetivo: <span class="text-white">Skrag</span> (Bajoz Fondoz)</div>
+                    <div class="label-text tracking-widest">Estado Operativo</div>
+                    <div class="text-xl text-green-400 font-bold font-mono">ANGRYHANDS</div>
+                    <div class="text-xs text-gray-200 font-mono">ID: XENO-MERC-040</div>
                 </div>
             </summary>
 
-            <!-- LORE CONTENT (Kroot-1.pdf) -->
-            <div class="p-4 pt-0 border-t border-gray-800 bg-[#0d0d0d] rich-text">
+            <!-- LORE CONTENT (Desde Kroot-1.pdf) -->
+            <div class="p-4 pt-0 border-t border-gray-700 bg-[#151515] rich-text">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
                     <!-- Perfil -->
                     <div>
-                        <h4 class="text-green-500 font-bold uppercase text-xs mb-2 border-b border-green-900 pb-1">Perfil: El Anticuerpo de la Nave</h4>
-                        <p class="text-xs text-gray-400 mb-2 italic">"La nave es un buffet. Tú decides quién llega al postre."</p>
-                        <ul class="text-[11px] space-y-1 text-gray-400 list-none pl-0">
-                            <li><strong class="text-gray-300">Rol:</strong> Tanque Biológico, DPS Melé y Ladrón.</li>
-                            <li><strong class="text-gray-300">Misión:</strong> Correo de Lady Viraque. Llevar viales químicos a Skrag.</li>
-                            <li><strong class="text-gray-300">Filosofía:</strong> Lo que no te mata, te hace más fuerte. Y lo que no está clavado, es tuyo.</li>
-                            <li><strong class="text-gray-300">Vicio:</strong> Cleptomanía (Si ves bolsillos, metes la mano).</li>
+                        <h4 class="text-green-400 font-bold uppercase text-xs mb-2 border-b border-green-800 pb-1">Perfil: El Anticuerpo de la Nave</h4>
+                        <p class="text-xs text-gray-200 mb-2 italic">"La nave es un buffet. Tú decides quién llega al postre."</p>
+                        <ul class="text-[11px] space-y-1 text-gray-200 list-none pl-0">
+                            <li><strong class="text-white">Rol:</strong> Tanque Biológico, DPS Melé y Ladrón.</li>
+                            <li><strong class="text-white">Misión:</strong> Correo de Lady Viraque. Llevar viales químicos a Skrag.</li>
+                            <li><strong class="text-white">Filosofía:</strong> Lo que no te mata, te hace más fuerte. Y lo que no está clavado, es tuyo.</li>
+                            <li><strong class="text-white">Vicio:</strong> Cleptomanía (Si ves bolsillos, metes la mano).</li>
                         </ul>
                     </div>
                     <!-- Tabú -->
                     <div>
-                        <h4 class="text-red-500 font-bold uppercase text-xs mb-2 border-b border-red-900 pb-1">El Tabú de Gurk (Regla de Oro)</h4>
-                        <p class="text-[11px] text-gray-400 mb-2">Prohibido terminantemente consumir los siguientes tejidos:</p>
-                        <ul class="text-[11px] text-red-400 space-y-1 list-none pl-0">
+                        <h4 class="text-red-400 font-bold uppercase text-xs mb-2 border-b border-red-900 pb-1">El Tabú de Gurk (Regla de Oro)</h4>
+                        <p class="text-[11px] text-gray-200 mb-2">Prohibido terminantemente consumir los siguientes tejidos:</p>
+                        <ul class="text-[11px] text-red-300 space-y-1 list-none pl-0">
                             <li><i class="fas fa-ban mr-1"></i> <strong>Orkos:</strong> Esporas contagiosas.</li>
                             <li><i class="fas fa-ban mr-1"></i> <strong>Tiránidos:</strong> La "Hambre Maldita".</li>
                             <li><i class="fas fa-ban mr-1"></i> <strong>Comida Procesada:</strong> "Ceniza" humana.</li>
                         </ul>
-                        <p class="text-[10px] text-gray-500 mt-2 italic">Romper el tabú tiene consecuencias evolutivas graves.</p>
+                        <p class="text-[10px] text-gray-400 mt-2 italic">Romper el tabú tiene consecuencias evolutivas graves.</p>
                     </div>
+                </div>
+            </div>
+        </details>
+
+        <!-- SESSION LOG SECTION -->
+        <details class="lg:col-span-12 panel shrink-0 group border-t-2 border-t-yellow-600/50">
+            <summary class="p-2 flex justify-between items-center cursor-pointer hover:bg-white/5 transition select-none bg-[#161616]">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-file-signature text-yellow-500"></i>
+                    <span class="text-xs font-bold text-white uppercase tracking-wider">Log de la Sesión</span>
+                </div>
+                <i class="fas fa-chevron-down text-xs text-gray-200 group-open:rotate-180 transition"></i>
+            </summary>
+            <div class="p-2 border-t border-[#333] bg-[#121212]">
+                <!-- Toolbar -->
+                <div class="flex border border-[#444] rounded-t bg-[#2a2a2a] border-b-0">
+                     <button onmousedown="event.preventDefault(); execCmd('bold')" class="p-1 px-3 text-gray-200 hover:text-white text-[10px] border-r border-[#444]"><i class="fas fa-bold"></i></button>
+                     <button onmousedown="event.preventDefault(); execCmd('italic')" class="p-1 px-3 text-gray-200 hover:text-white text-[10px] border-r border-[#444]"><i class="fas fa-italic"></i></button>
+                     <button onmousedown="event.preventDefault(); execCmd('underline')" class="p-1 px-3 text-gray-200 hover:text-white text-[10px] border-r border-[#444]"><i class="fas fa-underline"></i></button>
+                     <button onmousedown="event.preventDefault(); execCmd('insertUnorderedList')" class="p-1 px-3 text-gray-200 hover:text-white text-[10px] border-r border-[#444]"><i class="fas fa-list-ul"></i></button>
+                     <div class="flex-grow"></div>
+                     <button onclick="document.getElementById('session-log').innerHTML = ''" class="p-1 px-3 text-gray-400 hover:text-red-400 text-[10px]" title="Borrar Log"><i class="fas fa-trash"></i></button>
+                </div>
+                <!-- Editor -->
+                <div id="session-log" class="p-3 text-[11px] text-gray-200 min-h-[100px] max-h-[200px] overflow-y-auto rich-text bg-[#1f1f1f] border border-[#444] rounded-b focus:outline-none" contenteditable="true">
+                    <p class="text-gray-500 italic">Registro de misión iniciado. Haz clic para editar...</p>
                 </div>
             </div>
         </details>
@@ -322,37 +357,37 @@
             
             <!-- Vitals -->
             <div class="panel p-4 shrink-0">
-                <h2 class="text-gray-500 text-xs font-bold uppercase mb-3 flex items-center gap-2">
-                    <i class="fas fa-heartbeat"></i> Constantes Vitales
+                <h2 class="text-white text-xs font-bold uppercase mb-3 flex items-center gap-2">
+                    <i class="fas fa-heartbeat text-red-400"></i> Constantes Vitales
                 </h2>
                 <div class="flex justify-between items-center mb-4">
                     <!-- Heridas Control -->
                     <div class="text-center flex flex-col items-center">
-                        <label class="text-[10px] uppercase text-gray-500 font-bold block mb-1">Heridas</label>
-                        <div class="flex items-center bg-[#111] rounded border border-gray-800 p-1">
-                            <button onclick="modVal('hp', -1)" class="arrow-btn arrow-btn-lg text-gray-500 hover:text-red-500"><i class="fas fa-caret-left"></i></button>
+                        <label class="label-text block mb-1">Heridas</label>
+                        <div class="flex items-center bg-[#222] rounded border border-gray-600 p-1">
+                            <button onclick="modVal('hp', -1)" class="arrow-btn px-2 text-gray-300 hover:text-red-400"><i class="fas fa-caret-left"></i></button>
                             <input id="hp" type="number" value="12" class="editable text-3xl font-bold text-white h-10 w-16">
-                            <button onclick="modVal('hp', 1)" class="arrow-btn arrow-btn-lg text-gray-500 hover:text-green-500"><i class="fas fa-caret-right"></i></button>
+                            <button onclick="modVal('hp', 1)" class="arrow-btn px-2 text-gray-300 hover:text-green-400"><i class="fas fa-caret-right"></i></button>
                         </div>
                     </div>
                     <!-- Armadura -->
-                    <div class="text-center border-x border-gray-800 px-4">
-                        <label class="text-[10px] uppercase text-gray-500 font-bold block text-blue-400">Armadura</label>
+                    <div class="text-center border-x border-gray-700 px-4">
+                        <label class="label-text block text-blue-300">Armadura</label>
                         <div class="text-4xl font-bold text-blue-400 font-mono">7</div>
-                        <div class="text-[10px] text-gray-600">3 Piel + 4 Res</div>
+                        <div class="text-[10px] text-gray-300">3 Piel + 4 Res</div>
                     </div>
                     <!-- Destino Control -->
                     <div class="text-center flex flex-col items-center">
-                        <label class="text-[10px] uppercase text-gray-500 font-bold block mb-1">Destino</label>
-                        <div class="flex items-center bg-[#111] rounded border border-gray-800 p-1">
-                            <button onclick="modVal('fate', -1)" class="arrow-btn arrow-btn-lg text-gray-500 hover:text-red-500"><i class="fas fa-caret-left"></i></button>
-                            <input id="fate" type="number" value="2" class="editable text-3xl font-bold text-yellow-500 h-10 w-12">
-                            <button onclick="modVal('fate', 1)" class="arrow-btn arrow-btn-lg text-gray-500 hover:text-green-500"><i class="fas fa-caret-right"></i></button>
+                        <label class="label-text block mb-1">Destino</label>
+                        <div class="flex items-center bg-[#222] rounded border border-gray-600 p-1">
+                            <button onclick="modVal('fate', -1)" class="arrow-btn px-2 text-gray-300 hover:text-red-400"><i class="fas fa-caret-left"></i></button>
+                            <input id="fate" type="number" value="2" class="editable text-3xl font-bold text-yellow-400 h-10 w-12">
+                            <button onclick="modVal('fate', 1)" class="arrow-btn px-2 text-gray-300 hover:text-green-400"><i class="fas fa-caret-right"></i></button>
                         </div>
                     </div>
                 </div>
                 <!-- Movement -->
-                <div class="bg-[#111] p-2 rounded border border-gray-800 text-xs font-mono flex justify-between text-gray-400">
+                <div class="bg-[#1a1a1a] p-2 rounded border border-gray-600 text-xs font-mono flex justify-between text-gray-200">
                     <span>MOV:</span>
                     <span class="text-white">6m / 12m / 18m / 28m</span>
                 </div>
@@ -360,70 +395,70 @@
 
             <!-- Attributes -->
             <div class="panel shrink-0">
-                <div class="panel-header text-xs font-bold text-gray-400 uppercase">Perfil Genético</div>
-                <div class="grid grid-cols-3 gap-px bg-[#333] border-b border-[#333]">
+                <div class="panel-header text-xs font-bold text-white uppercase">Perfil Genético</div>
+                <div class="grid grid-cols-3 gap-px bg-[#444] border-b border-[#444]">
                     <!-- HA -->
-                    <div class="bg-[#1a1a1a] p-2 flex flex-col items-center hover:bg-[#222]" title="Habilidad de Armas">
-                        <div class="text-[10px] text-green-600 font-bold mb-1">HA</div>
-                        <button onclick="modVal('ha', 1)" class="arrow-btn arrow-btn-sm hover:bg-[#2a2a2a] rounded"><i class="fas fa-caret-up"></i></button>
+                    <div class="bg-[#1f1f1f] p-2 flex flex-col items-center hover:bg-[#2a2a2a]" title="Habilidad de Armas">
+                        <div class="text-[10px] text-green-400 font-bold mb-1">HA</div>
+                        <button onclick="modVal('ha', 1)" class="arrow-btn arrow-btn-sm hover:bg-[#333] rounded"><i class="fas fa-caret-up"></i></button>
                         <input id="ha" type="number" value="50" class="editable text-xl font-bold text-white py-1">
-                        <button onclick="modVal('ha', -1)" class="arrow-btn arrow-btn-sm hover:bg-[#2a2a2a] rounded"><i class="fas fa-caret-down"></i></button>
+                        <button onclick="modVal('ha', -1)" class="arrow-btn arrow-btn-sm hover:bg-[#333] rounded"><i class="fas fa-caret-down"></i></button>
                     </div>
                     <!-- HP -->
-                    <div class="bg-[#1a1a1a] p-2 flex flex-col items-center hover:bg-[#222]" title="Habilidad de Proyectiles">
-                        <div class="text-[10px] text-gray-500 font-bold mb-1">HP</div>
-                        <button onclick="modVal('hp_stat', 1)" class="arrow-btn arrow-btn-sm hover:bg-[#2a2a2a] rounded"><i class="fas fa-caret-up"></i></button>
+                    <div class="bg-[#1f1f1f] p-2 flex flex-col items-center hover:bg-[#2a2a2a]" title="Habilidad de Proyectiles">
+                        <div class="text-[10px] text-gray-100 font-bold mb-1">HP</div>
+                        <button onclick="modVal('hp_stat', 1)" class="arrow-btn arrow-btn-sm hover:bg-[#333] rounded"><i class="fas fa-caret-up"></i></button>
                         <input id="hp_stat" type="number" value="35" class="editable text-xl font-bold text-white py-1">
-                        <button onclick="modVal('hp_stat', -1)" class="arrow-btn arrow-btn-sm hover:bg-[#2a2a2a] rounded"><i class="fas fa-caret-down"></i></button>
+                        <button onclick="modVal('hp_stat', -1)" class="arrow-btn arrow-btn-sm hover:bg-[#333] rounded"><i class="fas fa-caret-down"></i></button>
                     </div>
                     <!-- F -->
-                    <div class="bg-[#1a1a1a] p-2 flex flex-col items-center hover:bg-[#222]" title="Fuerza">
-                        <div class="text-[10px] text-gray-500 font-bold mb-1">F</div>
-                        <button onclick="modVal('s', 1)" class="arrow-btn arrow-btn-sm hover:bg-[#2a2a2a] rounded"><i class="fas fa-caret-up"></i></button>
+                    <div class="bg-[#1f1f1f] p-2 flex flex-col items-center hover:bg-[#2a2a2a]" title="Fuerza">
+                        <div class="text-[10px] text-gray-100 font-bold mb-1">F</div>
+                        <button onclick="modVal('s', 1)" class="arrow-btn arrow-btn-sm hover:bg-[#333] rounded"><i class="fas fa-caret-up"></i></button>
                         <input id="s" type="number" value="40" class="editable text-xl font-bold text-white py-1">
-                        <button onclick="modVal('s', -1)" class="arrow-btn arrow-btn-sm hover:bg-[#2a2a2a] rounded"><i class="fas fa-caret-down"></i></button>
+                        <button onclick="modVal('s', -1)" class="arrow-btn arrow-btn-sm hover:bg-[#333] rounded"><i class="fas fa-caret-down"></i></button>
                     </div>
                     <!-- R -->
-                    <div class="bg-[#1a1a1a] p-2 flex flex-col items-center hover:bg-[#222]" title="Resistencia">
-                        <div class="text-[10px] text-gray-500 font-bold mb-1">R</div>
-                        <button onclick="modVal('t', 1)" class="arrow-btn arrow-btn-sm hover:bg-[#2a2a2a] rounded"><i class="fas fa-caret-up"></i></button>
+                    <div class="bg-[#1f1f1f] p-2 flex flex-col items-center hover:bg-[#2a2a2a]" title="Resistencia">
+                        <div class="text-[10px] text-gray-100 font-bold mb-1">R</div>
+                        <button onclick="modVal('t', 1)" class="arrow-btn arrow-btn-sm hover:bg-[#333] rounded"><i class="fas fa-caret-up"></i></button>
                         <input id="t" type="number" value="40" class="editable text-xl font-bold text-white py-1">
-                        <button onclick="modVal('t', -1)" class="arrow-btn arrow-btn-sm hover:bg-[#2a2a2a] rounded"><i class="fas fa-caret-down"></i></button>
+                        <button onclick="modVal('t', -1)" class="arrow-btn arrow-btn-sm hover:bg-[#333] rounded"><i class="fas fa-caret-down"></i></button>
                     </div>
                     <!-- AG -->
-                    <div class="bg-[#1a1a1a] p-2 flex flex-col items-center hover:bg-[#222]" title="Agilidad">
-                        <div class="text-[10px] text-green-600 font-bold mb-1">AG</div>
-                        <button onclick="modVal('ag', 1)" class="arrow-btn arrow-btn-sm hover:bg-[#2a2a2a] rounded"><i class="fas fa-caret-up"></i></button>
+                    <div class="bg-[#1f1f1f] p-2 flex flex-col items-center hover:bg-[#2a2a2a]" title="Agilidad">
+                        <div class="text-[10px] text-green-400 font-bold mb-1">AG</div>
+                        <button onclick="modVal('ag', 1)" class="arrow-btn arrow-btn-sm hover:bg-[#333] rounded"><i class="fas fa-caret-up"></i></button>
                         <input id="ag" type="number" value="45" class="editable text-xl font-bold text-white py-1">
-                        <button onclick="modVal('ag', -1)" class="arrow-btn arrow-btn-sm hover:bg-[#2a2a2a] rounded"><i class="fas fa-caret-down"></i></button>
+                        <button onclick="modVal('ag', -1)" class="arrow-btn arrow-btn-sm hover:bg-[#333] rounded"><i class="fas fa-caret-down"></i></button>
                     </div>
                     <!-- INT -->
-                    <div class="bg-[#1a1a1a] p-2 flex flex-col items-center hover:bg-[#222]" title="Inteligencia">
-                        <div class="text-[10px] text-gray-500 font-bold mb-1">INT</div>
-                        <button onclick="modVal('int', 1)" class="arrow-btn arrow-btn-sm hover:bg-[#2a2a2a] rounded"><i class="fas fa-caret-up"></i></button>
-                        <input id="int" type="number" value="25" class="editable text-xl font-bold text-gray-400 py-1">
-                        <button onclick="modVal('int', -1)" class="arrow-btn arrow-btn-sm hover:bg-[#2a2a2a] rounded"><i class="fas fa-caret-down"></i></button>
+                    <div class="bg-[#1f1f1f] p-2 flex flex-col items-center hover:bg-[#2a2a2a]" title="Inteligencia">
+                        <div class="text-[10px] text-gray-100 font-bold mb-1">INT</div>
+                        <button onclick="modVal('int', 1)" class="arrow-btn arrow-btn-sm hover:bg-[#333] rounded"><i class="fas fa-caret-up"></i></button>
+                        <input id="int" type="number" value="25" class="editable text-xl font-bold text-gray-200 py-1">
+                        <button onclick="modVal('int', -1)" class="arrow-btn arrow-btn-sm hover:bg-[#333] rounded"><i class="fas fa-caret-down"></i></button>
                     </div>
                     <!-- PER -->
-                    <div class="bg-[#1a1a1a] p-2 flex flex-col items-center hover:bg-[#222]" title="Percepción">
-                        <div class="text-[10px] text-green-600 font-bold mb-1">PER</div>
-                        <button onclick="modVal('per', 1)" class="arrow-btn arrow-btn-sm hover:bg-[#2a2a2a] rounded"><i class="fas fa-caret-up"></i></button>
+                    <div class="bg-[#1f1f1f] p-2 flex flex-col items-center hover:bg-[#2a2a2a]" title="Percepción">
+                        <div class="text-[10px] text-green-400 font-bold mb-1">PER</div>
+                        <button onclick="modVal('per', 1)" class="arrow-btn arrow-btn-sm hover:bg-[#333] rounded"><i class="fas fa-caret-up"></i></button>
                         <input id="per" type="number" value="50" class="editable text-xl font-bold text-white py-1">
-                        <button onclick="modVal('per', -1)" class="arrow-btn arrow-btn-sm hover:bg-[#2a2a2a] rounded"><i class="fas fa-caret-down"></i></button>
+                        <button onclick="modVal('per', -1)" class="arrow-btn arrow-btn-sm hover:bg-[#333] rounded"><i class="fas fa-caret-down"></i></button>
                     </div>
                     <!-- VOL -->
-                    <div class="bg-[#1a1a1a] p-2 flex flex-col items-center hover:bg-[#222]" title="Voluntad">
-                        <div class="text-[10px] text-gray-500 font-bold mb-1">VOL</div>
-                        <button onclick="modVal('wp', 1)" class="arrow-btn arrow-btn-sm hover:bg-[#2a2a2a] rounded"><i class="fas fa-caret-up"></i></button>
+                    <div class="bg-[#1f1f1f] p-2 flex flex-col items-center hover:bg-[#2a2a2a]" title="Voluntad">
+                        <div class="text-[10px] text-gray-100 font-bold mb-1">VOL</div>
+                        <button onclick="modVal('wp', 1)" class="arrow-btn arrow-btn-sm hover:bg-[#333] rounded"><i class="fas fa-caret-up"></i></button>
                         <input id="wp" type="number" value="30" class="editable text-xl font-bold text-white py-1">
-                        <button onclick="modVal('wp', -1)" class="arrow-btn arrow-btn-sm hover:bg-[#2a2a2a] rounded"><i class="fas fa-caret-down"></i></button>
+                        <button onclick="modVal('wp', -1)" class="arrow-btn arrow-btn-sm hover:bg-[#333] rounded"><i class="fas fa-caret-down"></i></button>
                     </div>
                     <!-- EMP -->
-                    <div class="bg-[#1a1a1a] p-2 flex flex-col items-center hover:bg-[#222]" title="Empatía">
-                        <div class="text-[10px] text-red-500 font-bold mb-1">EMP</div>
-                        <button onclick="modVal('fel', 1)" class="arrow-btn arrow-btn-sm hover:bg-[#2a2a2a] rounded"><i class="fas fa-caret-up"></i></button>
-                        <input id="fel" type="number" value="20" class="editable text-xl font-bold text-gray-500 py-1">
-                        <button onclick="modVal('fel', -1)" class="arrow-btn arrow-btn-sm hover:bg-[#2a2a2a] rounded"><i class="fas fa-caret-down"></i></button>
+                    <div class="bg-[#1f1f1f] p-2 flex flex-col items-center hover:bg-[#2a2a2a]" title="Empatía">
+                        <div class="text-[10px] text-red-400 font-bold mb-1">EMP</div>
+                        <button onclick="modVal('fel', 1)" class="arrow-btn arrow-btn-sm hover:bg-[#333] rounded"><i class="fas fa-caret-up"></i></button>
+                        <input id="fel" type="number" value="20" class="editable text-xl font-bold text-gray-200 py-1">
+                        <button onclick="modVal('fel', -1)" class="arrow-btn arrow-btn-sm hover:bg-[#333] rounded"><i class="fas fa-caret-down"></i></button>
                     </div>
                 </div>
             </div>
@@ -433,7 +468,7 @@
                 <div class="flex justify-between items-start mb-4">
                     <div>
                         <h3 class="text-red-500 font-bold uppercase text-lg">Maldición: Hambre</h3>
-                        <div class="text-[10px] text-gray-400">Metabolismo Acelerado</div>
+                        <div class="text-[10px] text-gray-200">Metabolismo Acelerado</div>
                     </div>
                     <div class="hunger-die text-green-400 shadow-[0_0_15px_rgba(74,222,128,0.3)]">
                         <span id="hungerValue" class="font-mono font-bold">10</span>
@@ -442,16 +477,16 @@
 
                 <div class="space-y-1 mb-4">
                     <div id="status-10" class="text-xs bg-[#222] p-1 px-2 rounded border-l-2 border-green-500 text-white font-bold opacity-100">10-7: Saciado (Óptimo)</div>
-                    <div id="status-6" class="text-xs bg-[#222] p-1 px-2 rounded border-l-2 border-yellow-500 text-gray-400 opacity-50">6-4: Hambriento (-20 Sigilo)</div>
-                    <div id="status-3" class="text-xs bg-[#222] p-1 px-2 rounded border-l-2 border-red-500 text-gray-400 opacity-50">3-1: Voraz (-10 Atq, No Correr)</div>
+                    <div id="status-6" class="text-xs bg-[#222] p-1 px-2 rounded border-l-2 border-yellow-500 text-gray-200 opacity-50">6-4: Hambriento (-20 Sigilo)</div>
+                    <div id="status-3" class="text-xs bg-[#222] p-1 px-2 rounded border-l-2 border-red-500 text-gray-200 opacity-50">3-1: Voraz (-10 Atq, No Correr)</div>
                     <div id="status-0" class="text-xs bg-red-900/30 p-1 px-2 rounded border-l-2 border-red-700 text-red-400 opacity-50 font-bold">0: COLAPSO (Locura)</div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-2">
-                    <button onclick="updateHunger(-1)" class="bg-[#333] hover:bg-red-900/50 text-red-400 text-xs font-bold py-2 rounded border border-gray-700 transition-colors">
+                    <button onclick="updateHunger(-1)" class="bg-[#222] hover:bg-red-900/50 text-red-400 text-xs font-bold py-2 rounded border border-gray-600 transition-colors">
                         -1 DESGASTE
                     </button>
-                    <button onclick="updateHunger(1)" class="bg-[#333] hover:bg-green-900/50 text-green-400 text-xs font-bold py-2 rounded border border-gray-700 transition-colors">
+                    <button onclick="updateHunger(1)" class="bg-[#222] hover:bg-green-900/50 text-green-400 text-xs font-bold py-2 rounded border border-gray-600 transition-colors">
                         +1 COMER SNACK
                     </button>
                 </div>
@@ -460,7 +495,7 @@
                     <summary class="p-2 text-[10px] text-red-400 cursor-pointer uppercase font-bold flex items-center gap-1 select-none">
                         <i class="fas fa-dna"></i> Rito de Asimilación (Reglas)
                     </summary>
-                    <div class="px-2 pb-2 text-[10px] text-gray-400 rich-text">
+                    <div class="px-2 pb-2 text-[10px] text-gray-200 rich-text">
                         <p class="mb-1"><strong>Acción Completa:</strong> Comer cadáver fresco. +5 Hambre.</p>
                         <p class="font-bold text-white mb-1">Tirada d10:</p>
                         <ul>
@@ -481,34 +516,34 @@
                 </h3>
 
                 <!-- ADD BUFF FORM -->
-                <div class="p-2 border-b border-[#333] bg-[#151515] mb-4 rounded border">
+                <div class="p-2 border border-[#444] bg-[#1a1a1a] mb-4 rounded">
                     <div class="flex gap-1 mb-1">
-                        <input type="text" id="newBuffName" placeholder="Nombre Habilidad" class="bg-[#222] border border-[#444] text-[10px] text-white px-1 w-1/2 focus:outline-none focus:border-purple-500">
-                        <select id="newBuffType" class="bg-[#222] border border-[#444] text-[10px] text-gray-400 px-1 w-1/2 focus:outline-none cursor-pointer">
+                        <input type="text" id="newBuffName" placeholder="Nombre Habilidad" class="bg-[#2a2a2a] border border-[#555] text-[10px] text-white px-1 w-1/2 focus:outline-none focus:border-purple-500">
+                        <select id="newBuffType" class="bg-[#2a2a2a] border border-[#555] text-[10px] text-gray-200 px-1 w-1/2 focus:outline-none cursor-pointer">
                             <option value="temp">Temporal</option>
                             <option value="perm">Permanente</option>
                         </select>
                     </div>
                     
                     <!-- RICH TEXT EDITOR -->
-                    <div class="border border-[#444] rounded bg-[#1a1a1a] mb-1">
-                        <div class="flex border-b border-[#444] bg-[#222]">
-                            <button onmousedown="event.preventDefault(); execCmd('bold')" class="p-1 text-gray-400 hover:text-white text-[10px] w-6 border-r border-[#444]"><i class="fas fa-bold"></i></button>
-                            <button onmousedown="event.preventDefault(); execCmd('italic')" class="p-1 text-gray-400 hover:text-white text-[10px] w-6 border-r border-[#444]"><i class="fas fa-italic"></i></button>
-                            <button onmousedown="event.preventDefault(); execCmd('underline')" class="p-1 text-gray-400 hover:text-white text-[10px] w-6 border-r border-[#444]"><i class="fas fa-underline"></i></button>
-                            <button onmousedown="event.preventDefault(); execCmd('insertUnorderedList')" class="p-1 text-gray-400 hover:text-white text-[10px] w-6"><i class="fas fa-list-ul"></i></button>
+                    <div class="border border-[#555] rounded bg-[#222] mb-1">
+                        <div class="flex border-b border-[#555] bg-[#333]">
+                            <button onmousedown="event.preventDefault(); execCmd('bold')" class="p-1 text-gray-300 hover:text-white text-[10px] w-6 border-r border-[#555]"><i class="fas fa-bold"></i></button>
+                            <button onmousedown="event.preventDefault(); execCmd('italic')" class="p-1 text-gray-300 hover:text-white text-[10px] w-6 border-r border-[#555]"><i class="fas fa-italic"></i></button>
+                            <button onmousedown="event.preventDefault(); execCmd('underline')" class="p-1 text-gray-300 hover:text-white text-[10px] w-6 border-r border-[#555]"><i class="fas fa-underline"></i></button>
+                            <button onmousedown="event.preventDefault(); execCmd('insertUnorderedList')" class="p-1 text-gray-300 hover:text-white text-[10px] w-6"><i class="fas fa-list-ul"></i></button>
                         </div>
-                        <div id="newBuffDesc" class="p-1 text-[10px] text-gray-300 min-h-[40px] focus:outline-none max-h-[100px] overflow-y-auto rich-text" contenteditable="true"></div>
+                        <div id="newBuffDesc" class="p-2 text-[10px] text-gray-200 min-h-[40px] focus:outline-none max-h-[100px] overflow-y-auto rich-text" contenteditable="true"></div>
                     </div>
 
                     <div class="flex gap-1">
-                         <select id="newBuffColor" class="bg-[#222] border border-[#444] text-[10px] text-gray-400 px-1 w-1/2 focus:outline-none cursor-pointer">
+                         <select id="newBuffColor" class="bg-[#2a2a2a] border border-[#555] text-[10px] text-gray-200 px-1 w-1/2 focus:outline-none cursor-pointer">
                             <option value="buff-green">Verde (Salud)</option>
                             <option value="buff-purple">Púrpura (Mutación)</option>
                             <option value="buff-red">Rojo (Combate)</option>
                             <option value="buff-blue">Azul (Mental)</option>
                         </select>
-                         <select id="newBuffIcon" class="bg-[#222] border border-[#444] text-[10px] text-gray-400 px-1 w-1/4 focus:outline-none cursor-pointer">
+                         <select id="newBuffIcon" class="bg-[#2a2a2a] border border-[#555] text-[10px] text-gray-200 px-1 w-1/4 focus:outline-none cursor-pointer">
                             <option value="fa-dna">ADN</option>
                             <option value="fa-heart-pulse">Salud</option>
                             <option value="fa-bolt">Rayo</option>
@@ -516,14 +551,14 @@
                             <option value="fa-eye">Ojo</option>
                             <option value="fa-person-running">Correr</option>
                         </select>
-                        <button onclick="addNewBuff()" class="bg-[#333] hover:bg-purple-700 text-white px-2 text-[10px] border border-[#444] w-1/4 transition"><i class="fas fa-plus"></i></button>
+                        <button onclick="addNewBuff()" class="bg-[#333] hover:bg-purple-700 text-white px-2 text-[10px] border border-[#555] w-1/4 transition"><i class="fas fa-plus"></i></button>
                     </div>
                 </div>
 
                 <!-- Temp Section -->
                 <div class="mb-4">
                     <div class="flex justify-between items-center mb-2">
-                        <span class="text-[10px] uppercase text-gray-500 font-bold">Buffs Temporales (1 Combate)</span>
+                        <span class="text-[10px] uppercase text-gray-200 font-bold">Buffs Temporales (1 Combate)</span>
                     </div>
                     <div id="temp-buffs-list" class="space-y-2">
                         <!-- Filled by JS -->
@@ -533,7 +568,53 @@
                 <!-- Perm Section -->
                 <div>
                     <div class="flex justify-between items-center mb-2">
-                        <span class="text-[10px] uppercase text-gray-500 font-bold">Asimilaciones Permanentes</span>
+                        <span class="text-[10px] uppercase text-gray-200 font-bold">Asimilaciones Permanentes</span>
+                    </div>
+                    
+                    <!-- RICH TEXT EDITOR -->
+                    <div class="border border-[#555] rounded bg-[#222] mb-1">
+                        <div class="flex border-b border-[#555] bg-[#333]">
+                            <button onmousedown="event.preventDefault(); execCmd('bold')" class="p-1 text-gray-300 hover:text-white text-[10px] w-6 border-r border-[#555]"><i class="fas fa-bold"></i></button>
+                            <button onmousedown="event.preventDefault(); execCmd('italic')" class="p-1 text-gray-300 hover:text-white text-[10px] w-6 border-r border-[#555]"><i class="fas fa-italic"></i></button>
+                            <button onmousedown="event.preventDefault(); execCmd('underline')" class="p-1 text-gray-300 hover:text-white text-[10px] w-6 border-r border-[#555]"><i class="fas fa-underline"></i></button>
+                            <button onmousedown="event.preventDefault(); execCmd('insertUnorderedList')" class="p-1 text-gray-300 hover:text-white text-[10px] w-6"><i class="fas fa-list-ul"></i></button>
+                        </div>
+                        <div id="newBuffDesc" class="p-2 text-[10px] text-gray-200 min-h-[40px] focus:outline-none max-h-[100px] overflow-y-auto rich-text" contenteditable="true"></div>
+                    </div>
+
+                    <div class="flex gap-1">
+                         <select id="newBuffColor" class="bg-[#2a2a2a] border border-[#555] text-[10px] text-gray-300 px-1 w-1/2 focus:outline-none cursor-pointer">
+                            <option value="buff-green">Verde (Salud)</option>
+                            <option value="buff-purple">Púrpura (Mutación)</option>
+                            <option value="buff-red">Rojo (Combate)</option>
+                            <option value="buff-blue">Azul (Mental)</option>
+                        </select>
+                         <select id="newBuffIcon" class="bg-[#2a2a2a] border border-[#555] text-[10px] text-gray-300 px-1 w-1/4 focus:outline-none cursor-pointer">
+                            <option value="fa-dna">ADN</option>
+                            <option value="fa-heart-pulse">Salud</option>
+                            <option value="fa-bolt">Rayo</option>
+                            <option value="fa-skull">Calavera</option>
+                            <option value="fa-eye">Ojo</option>
+                            <option value="fa-person-running">Correr</option>
+                        </select>
+                        <button onclick="addNewBuff()" class="bg-[#333] hover:bg-purple-700 text-white px-2 text-[10px] border border-[#555] w-1/4 transition"><i class="fas fa-plus"></i></button>
+                    </div>
+                </div>
+
+                <!-- Temp Section -->
+                <div class="mb-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-[10px] uppercase text-gray-400 font-bold">Buffs Temporales (1 Combate)</span>
+                    </div>
+                    <div id="temp-buffs-list" class="space-y-2">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+
+                <!-- Perm Section -->
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-[10px] uppercase text-gray-400 font-bold">Asimilaciones Permanentes</span>
                     </div>
                     <div id="perm-buffs-list" class="space-y-2">
                         <!-- Filled by JS -->
@@ -563,19 +644,19 @@
                         <div class="absolute left-0 top-4 flex flex-col gap-3">
                             <!-- Head (Clickable) -->
                             <div id="slot-head" class="gear-slot border-dashed border-gray-600" onclick="unequip('head')">
-                                <i class="fas fa-helmet-safety text-gray-700"></i>
+                                <i class="fas fa-helmet-safety text-gray-600"></i>
                             </div>
                             <!-- Chest -->
                             <div id="slot-body" class="gear-slot border-dashed border-gray-600" onclick="unequip('body')">
-                                <i class="fas fa-vest text-gray-700"></i>
+                                <i class="fas fa-vest text-gray-600"></i>
                             </div>
                             <!-- Wrists (Clickable) -->
                              <div id="slot-wrists" class="gear-slot border-dashed border-gray-600" onclick="unequip('wrists')">
-                                <i class="fas fa-ring text-gray-700"></i>
+                                <i class="fas fa-ring text-gray-600"></i>
                             </div>
                             <!-- Trinket 1 -->
                             <div id="slot-trinket1" class="gear-slot border-dashed border-gray-600" onclick="unequip('trinket1')">
-                                <i class="fas fa-gem text-gray-700"></i>
+                                <i class="fas fa-gem text-gray-600"></i>
                             </div>
                         </div>
 
@@ -586,19 +667,19 @@
                         <div class="absolute right-0 top-4 flex flex-col gap-3">
                             <!-- Hands (Clickable) -->
                             <div id="slot-hands" class="gear-slot border-dashed border-gray-600" onclick="unequip('hands')">
-                                <i class="fas fa-mitten text-gray-700"></i>
+                                <i class="fas fa-mitten text-gray-600"></i>
                             </div>
                             <!-- Legs (Clickable) -->
                              <div id="slot-legs" class="gear-slot border-dashed border-gray-600" onclick="unequip('legs')">
-                                <i class="fas fa-socks text-gray-700"></i>
+                                <i class="fas fa-socks text-gray-600"></i>
                             </div>
                             <!-- Boots -->
                             <div id="slot-feet" class="gear-slot border-dashed border-gray-600" onclick="unequip('feet')">
-                                <i class="fas fa-boot text-gray-700"></i>
+                                <i class="fas fa-boot text-gray-600"></i>
                             </div>
                             <!-- Trinket 2 -->
                             <div id="slot-trinket2" class="gear-slot border-dashed border-gray-600" onclick="unequip('trinket2')">
-                                <i class="fas fa-gem text-gray-700"></i>
+                                <i class="fas fa-gem text-gray-600"></i>
                             </div>
                         </div>
 
@@ -606,16 +687,16 @@
                         <div class="absolute -bottom-2 flex gap-12 w-full justify-center px-4">
                             <!-- Main Hand -->
                             <div class="flex flex-col items-center">
-                                <span class="text-[9px] text-gray-500 uppercase mb-1">Mano Principal</span>
-                                <div id="slot-main" class="gear-slot border-dashed" onclick="unequip('main')">
-                                    <i class="fas fa-fist-raised"></i>
+                                <span class="text-[9px] text-gray-400 uppercase mb-1">Mano Principal</span>
+                                <div id="slot-main" class="gear-slot border-dashed border-gray-600" onclick="unequip('main')">
+                                    <i class="fas fa-fist-raised text-gray-500"></i>
                                 </div>
                             </div>
                             <!-- Off Hand -->
                             <div class="flex flex-col items-center">
-                                <span class="text-[9px] text-gray-500 uppercase mb-1">Secundaria</span>
-                                <div id="slot-off" class="gear-slot border-dashed" onclick="unequip('off')">
-                                    <i class="fas fa-hand-paper"></i>
+                                <span class="text-[9px] text-gray-400 uppercase mb-1">Secundaria</span>
+                                <div id="slot-off" class="gear-slot border-dashed border-gray-600" onclick="unequip('off')">
+                                    <i class="fas fa-hand-paper text-gray-500"></i>
                                 </div>
                             </div>
                         </div>
@@ -624,16 +705,16 @@
                 </div>
 
                 <!-- ACTIVE BUFFS / PROTOCOLS DISPLAY -->
-                <div class="mt-8 p-3 bg-[#0a0a0a] border-t border-[#222]">
+                <div class="mt-8 p-3 bg-[#0a0a0a] border-t border-[#333]">
                     <!-- ACTIVE GEAR DETAILS BOX -->
-                    <div class="panel-header mt-2 border-t border-[#333] bg-transparent pl-0 text-blue-400">Detalles de Equipo Activo</div>
+                    <div class="panel-header mt-2 border-t border-[#444] bg-transparent pl-0 text-blue-400">Detalles de Equipo Activo</div>
                     <div id="active-gear-info" class="space-y-1 mt-1">
                         <!-- Filled by JS -->
                     </div>
 
                     <div id="protocol-display" class="hidden bg-orange-900/20 border border-orange-700/50 p-2 rounded flex items-center justify-between mb-2 mt-4 animate-pulse">
                         <span class="text-orange-500 text-xs font-bold uppercase"><i class="fas fa-bolt mr-1"></i> Protocolo: Gran Trinchante</span>
-                        <span class="text-[9px] text-gray-400">Daga + Tenedor activos</span>
+                        <span class="text-[9px] text-gray-200">Daga + Tenedor activos</span>
                     </div>
                     <div id="2h-warning" class="hidden text-center text-[10px] text-red-500 font-mono p-1 border border-red-900 bg-red-900/10 rounded">
                         [ARMA A DOS MANOS EQUIPADA - SLOT SECUNDARIO BLOQUEADO]
@@ -641,17 +722,43 @@
                 </div>
             </div>
 
+            <!-- BATTLE STATUS SECTION -->
+            <details class="panel shrink-0 group border-t-2 border-t-red-600/50">
+                <summary class="p-2 flex justify-between items-center cursor-pointer hover:bg-white/5 transition select-none bg-[#161616]">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-clipboard-list text-red-500"></i>
+                        <span class="text-xs font-bold text-white uppercase tracking-wider">Estado de Batalla</span>
+                    </div>
+                    <i class="fas fa-chevron-down text-xs text-gray-200 group-open:rotate-180 transition"></i>
+                </summary>
+                <div class="p-2 border-t border-[#333] bg-[#121212]">
+                    <!-- Toolbar -->
+                    <div class="flex border border-[#444] rounded-t bg-[#2a2a2a] border-b-0">
+                         <button onmousedown="event.preventDefault(); execCmd('bold')" class="p-1 px-3 text-gray-200 hover:text-white text-[10px] border-r border-[#444]"><i class="fas fa-bold"></i></button>
+                         <button onmousedown="event.preventDefault(); execCmd('italic')" class="p-1 px-3 text-gray-200 hover:text-white text-[10px] border-r border-[#444]"><i class="fas fa-italic"></i></button>
+                         <button onmousedown="event.preventDefault(); execCmd('underline')" class="p-1 px-3 text-gray-200 hover:text-white text-[10px] border-r border-[#444]"><i class="fas fa-underline"></i></button>
+                         <button onmousedown="event.preventDefault(); execCmd('insertUnorderedList')" class="p-1 px-3 text-gray-200 hover:text-white text-[10px] border-r border-[#444]"><i class="fas fa-list-ul"></i></button>
+                         <div class="flex-grow"></div>
+                         <button onclick="document.getElementById('battle-status-log').innerHTML = ''" class="p-1 px-3 text-gray-400 hover:text-red-400 text-[10px]" title="Borrar Log"><i class="fas fa-trash"></i></button>
+                    </div>
+                    <!-- Editor -->
+                    <div id="battle-status-log" class="p-3 text-[11px] text-gray-200 min-h-[80px] max-h-[150px] overflow-y-auto rich-text bg-[#1f1f1f] border border-[#444] rounded-b focus:outline-none" contenteditable="true">
+                        <p class="text-gray-500 italic">Notas tácticas, condiciones o recordatorios...</p>
+                    </div>
+                </div>
+            </details>
+
             <!-- DICE ROLLER INTEGRADO -->
             <div class="panel p-3 bg-[#111] shrink-0">
-                <div class="flex justify-between items-center mb-2 border-b border-gray-800 pb-2">
-                    <span class="text-[10px] font-bold text-gray-500 uppercase">Motor de Probabilidad</span>
+                <div class="flex justify-between items-center mb-2 border-b border-gray-700 pb-2">
+                    <span class="text-[10px] font-bold text-gray-200 uppercase">Daditos Kroot</span>
                     <span id="rollResult" class="text-2xl font-mono text-white font-bold">--</span>
                 </div>
                 <div class="grid grid-cols-4 gap-2">
-                    <button onclick="roll(100)" class="bg-[#1a1a1a] hover:bg-[#333] text-gray-300 text-xs py-2 rounded border border-gray-700 font-bold transition">d100</button>
-                    <button onclick="roll(20)" class="bg-[#1a1a1a] hover:bg-[#333] text-gray-400 text-xs py-2 rounded border border-gray-700 transition">d20</button>
-                    <button onclick="roll(10)" class="bg-[#1a1a1a] hover:bg-[#333] text-gray-400 text-xs py-2 rounded border border-gray-700 transition">d10</button>
-                    <button onclick="roll(5)" class="bg-[#1a1a1a] hover:bg-[#333] text-gray-400 text-xs py-2 rounded border border-gray-700 transition">d5</button>
+                    <button onclick="roll(100)" class="bg-[#222] hover:bg-[#333] text-gray-200 text-xs py-2 rounded border border-gray-600 font-bold transition">d100</button>
+                    <button onclick="roll(20)" class="bg-[#222] hover:bg-[#333] text-gray-200 text-xs py-2 rounded border border-gray-600 transition">d20</button>
+                    <button onclick="roll(10)" class="bg-[#222] hover:bg-[#333] text-gray-200 text-xs py-2 rounded border border-gray-600 transition">d10</button>
+                    <button onclick="roll(5)" class="bg-[#222] hover:bg-[#333] text-gray-200 text-xs py-2 rounded border border-gray-600 transition">d5</button>
                 </div>
             </div>
 
@@ -664,37 +771,37 @@
             <div class="panel shrink-0">
                 <div class="panel-header flex justify-between">
                     <span>Armería Disponible</span>
-                    <span class="text-xs text-gray-500" id="w-count"></span>
+                    <span class="text-xs text-gray-200" id="w-count"></span>
                 </div>
                 
                 <!-- ADD WEAPON -->
                 <div class="p-2 border-b border-[#333] bg-[#151515]">
                     <div class="flex gap-1 mb-1">
-                        <input type="text" id="newWeaponName" placeholder="Nombre Arma" class="bg-[#222] border border-[#444] text-[10px] text-white px-1 w-1/2 focus:outline-none focus:border-green-500">
-                        <input type="text" id="newWeaponStats" placeholder="Daño (ej: 1d10+3)" class="bg-[#222] border border-[#444] text-[10px] text-gray-400 px-1 w-1/2 focus:outline-none">
+                        <input type="text" id="newWeaponName" placeholder="Nombre Arma" class="bg-[#222] border border-[#555] text-[10px] text-white px-1 w-1/2 focus:outline-none focus:border-green-500">
+                        <input type="text" id="newWeaponStats" placeholder="Daño (ej: 1d10+3)" class="bg-[#222] border border-[#555] text-[10px] text-gray-200 px-1 w-1/2 focus:outline-none">
                     </div>
                     <!-- RICH TEXT EDITOR -->
-                    <div class="border border-[#444] rounded bg-[#1a1a1a] mb-1">
-                        <div class="flex border-b border-[#444] bg-[#222]">
-                            <button onmousedown="event.preventDefault(); execCmd('bold')" class="p-1 text-gray-400 hover:text-white text-[10px] w-6 border-r border-[#444]"><i class="fas fa-bold"></i></button>
-                            <button onmousedown="event.preventDefault(); execCmd('italic')" class="p-1 text-gray-400 hover:text-white text-[10px] w-6 border-r border-[#444]"><i class="fas fa-italic"></i></button>
-                            <button onmousedown="event.preventDefault(); execCmd('underline')" class="p-1 text-gray-400 hover:text-white text-[10px] w-6 border-r border-[#444]"><i class="fas fa-underline"></i></button>
+                    <div class="border border-[#555] rounded bg-[#1a1a1a] mb-1">
+                        <div class="flex border-b border-[#555] bg-[#222]">
+                            <button onmousedown="event.preventDefault(); execCmd('bold')" class="p-1 text-gray-400 hover:text-white text-[10px] w-6 border-r border-[#555]"><i class="fas fa-bold"></i></button>
+                            <button onmousedown="event.preventDefault(); execCmd('italic')" class="p-1 text-gray-400 hover:text-white text-[10px] w-6 border-r border-[#555]"><i class="fas fa-italic"></i></button>
+                            <button onmousedown="event.preventDefault(); execCmd('underline')" class="p-1 text-gray-400 hover:text-white text-[10px] w-6 border-r border-[#555]"><i class="fas fa-underline"></i></button>
                             <button onmousedown="event.preventDefault(); execCmd('insertUnorderedList')" class="p-1 text-gray-400 hover:text-white text-[10px] w-6"><i class="fas fa-list-ul"></i></button>
                         </div>
-                        <div id="newWeaponDesc" class="p-1 text-[10px] text-gray-300 min-h-[40px] focus:outline-none max-h-[100px] overflow-y-auto rich-text" contenteditable="true"></div>
+                        <div id="newWeaponDesc" class="p-2 text-[10px] text-gray-200 min-h-[40px] focus:outline-none max-h-[100px] overflow-y-auto rich-text" contenteditable="true"></div>
                     </div>
                     <div class="flex gap-1">
-                        <select id="newWeaponType" class="bg-[#222] border border-[#444] text-[10px] text-gray-400 px-1 w-1/2 focus:outline-none cursor-pointer">
+                        <select id="newWeaponType" class="bg-[#222] border border-[#555] text-[10px] text-gray-200 px-1 w-1/2 focus:outline-none cursor-pointer">
                             <option value="1h">1 Mano</option>
                             <option value="2h">2 Manos</option>
                             <option value="shield">Escudo</option>
                         </select>
-                        <select id="newWeaponColor" class="bg-[#222] border border-[#444] text-[10px] text-gray-400 px-1 w-1/4 focus:outline-none cursor-pointer">
+                        <select id="newWeaponColor" class="bg-[#222] border border-[#555] text-[10px] text-gray-200 px-1 w-1/4 focus:outline-none cursor-pointer">
                             <option value="text-gray-300">Común</option>
                             <option value="text-blue-400">Raro</option>
                             <option value="text-purple-400">Épico</option>
                         </select>
-                        <button onclick="addWeapon()" class="bg-[#333] hover:bg-green-700 text-white px-2 text-[10px] border border-[#444] w-1/4 transition"><i class="fas fa-plus"></i></button>
+                        <button onclick="addWeapon()" class="bg-[#333] hover:bg-green-700 text-white px-2 text-[10px] border border-[#555] w-1/4 transition"><i class="fas fa-plus"></i></button>
                     </div>
                 </div>
 
@@ -710,21 +817,21 @@
                 <!-- ADD ARMOR -->
                 <div class="p-2 border-b border-[#333] bg-[#151515]">
                     <div class="flex gap-1 mb-1">
-                        <input type="text" id="newArmorName" placeholder="Nombre Armadura" class="bg-[#222] border border-[#444] text-[10px] text-white px-1 w-1/2 focus:outline-none focus:border-green-500">
-                        <input type="text" id="newArmorStats" placeholder="AP (ej: AP 4)" class="bg-[#222] border border-[#444] text-[10px] text-gray-400 px-1 w-1/2 focus:outline-none">
+                        <input type="text" id="newArmorName" placeholder="Nombre Armadura" class="bg-[#222] border border-[#555] text-[10px] text-white px-1 w-1/2 focus:outline-none focus:border-green-500">
+                        <input type="text" id="newArmorStats" placeholder="AP (ej: AP 4)" class="bg-[#222] border border-[#555] text-[10px] text-gray-200 px-1 w-1/2 focus:outline-none">
                     </div>
                     <!-- RICH TEXT EDITOR -->
-                    <div class="border border-[#444] rounded bg-[#1a1a1a] mb-1">
-                        <div class="flex border-b border-[#444] bg-[#222]">
-                            <button onmousedown="event.preventDefault(); execCmd('bold')" class="p-1 text-gray-400 hover:text-white text-[10px] w-6 border-r border-[#444]"><i class="fas fa-bold"></i></button>
-                            <button onmousedown="event.preventDefault(); execCmd('italic')" class="p-1 text-gray-400 hover:text-white text-[10px] w-6 border-r border-[#444]"><i class="fas fa-italic"></i></button>
-                            <button onmousedown="event.preventDefault(); execCmd('underline')" class="p-1 text-gray-400 hover:text-white text-[10px] w-6 border-r border-[#444]"><i class="fas fa-underline"></i></button>
+                    <div class="border border-[#555] rounded bg-[#1a1a1a] mb-1">
+                        <div class="flex border-b border-[#555] bg-[#222]">
+                            <button onmousedown="event.preventDefault(); execCmd('bold')" class="p-1 text-gray-400 hover:text-white text-[10px] w-6 border-r border-[#555]"><i class="fas fa-bold"></i></button>
+                            <button onmousedown="event.preventDefault(); execCmd('italic')" class="p-1 text-gray-400 hover:text-white text-[10px] w-6 border-r border-[#555]"><i class="fas fa-italic"></i></button>
+                            <button onmousedown="event.preventDefault(); execCmd('underline')" class="p-1 text-gray-400 hover:text-white text-[10px] w-6 border-r border-[#555]"><i class="fas fa-underline"></i></button>
                             <button onmousedown="event.preventDefault(); execCmd('insertUnorderedList')" class="p-1 text-gray-400 hover:text-white text-[10px] w-6"><i class="fas fa-list-ul"></i></button>
                         </div>
-                        <div id="newArmorDesc" class="p-1 text-[10px] text-gray-300 min-h-[40px] focus:outline-none max-h-[100px] overflow-y-auto rich-text" contenteditable="true"></div>
+                        <div id="newArmorDesc" class="p-2 text-[10px] text-gray-200 min-h-[40px] focus:outline-none max-h-[100px] overflow-y-auto rich-text" contenteditable="true"></div>
                     </div>
                     <div class="flex gap-1">
-                        <select id="newArmorSlot" class="bg-[#222] border border-[#444] text-[10px] text-gray-400 px-1 w-1/2 focus:outline-none cursor-pointer">
+                        <select id="newArmorSlot" class="bg-[#222] border border-[#555] text-[10px] text-gray-200 px-1 w-1/2 focus:outline-none cursor-pointer">
                             <option value="head">Cabeza</option>
                             <option value="body">Torso</option>
                             <option value="hands">Guantes</option>
@@ -733,12 +840,12 @@
                             <option value="feet">Pies</option>
                             <option value="trinket">Abalorio</option>
                         </select>
-                        <select id="newArmorColor" class="bg-[#222] border border-[#444] text-[10px] text-gray-400 px-1 w-1/4 focus:outline-none cursor-pointer">
+                        <select id="newArmorColor" class="bg-[#222] border border-[#555] text-[10px] text-gray-200 px-1 w-1/4 focus:outline-none cursor-pointer">
                             <option value="text-gray-300">Común</option>
                             <option value="text-blue-400">Raro</option>
                             <option value="text-purple-400">Épico</option>
                         </select>
-                        <button onclick="addArmor()" class="bg-[#333] hover:bg-green-700 text-white px-2 text-[10px] border border-[#444] w-1/4 transition"><i class="fas fa-plus"></i></button>
+                        <button onclick="addArmor()" class="bg-[#333] hover:bg-green-700 text-white px-2 text-[10px] border border-[#555] w-1/4 transition"><i class="fas fa-plus"></i></button>
                     </div>
                 </div>
 
@@ -749,7 +856,7 @@
 
             <!-- Bolsa de Snacks (Objetos que se reinician) -->
             <div class="panel shrink-0">
-                <div class="panel-header text-xs font-bold text-gray-400 uppercase flex justify-between">
+                <div class="panel-header text-xs font-bold text-gray-200 uppercase flex justify-between">
                     <span>Bolsa de Snacks (Suministros)</span>
                     <i class="fas fa-utensils"></i>
                 </div>
@@ -760,7 +867,7 @@
 
             <!-- Botín de Batalla (Gestión de Loot) -->
             <div class="panel shrink-0 flex flex-col">
-                <div class="panel-header text-xs font-bold text-gray-400 uppercase flex justify-between">
+                <div class="panel-header text-xs font-bold text-gray-200 uppercase flex justify-between">
                     <span>Botín de Batalla (Loot)</span>
                     <i class="fas fa-sack-dollar"></i>
                 </div>
@@ -768,8 +875,8 @@
                 <!-- ADD NEW ITEM SECTION -->
                 <div class="p-2 border-b border-[#333] bg-[#151515]">
                     <div class="flex gap-1 mb-1">
-                        <input type="text" id="newItemName" placeholder="Nombre" class="bg-[#222] border border-[#444] text-[10px] text-white px-1 w-1/2 focus:outline-none focus:border-green-500">
-                        <select id="newItemColor" class="bg-[#222] border border-[#444] text-[10px] text-gray-400 px-1 w-1/2 focus:outline-none cursor-pointer">
+                        <input type="text" id="newItemName" placeholder="Nombre" class="bg-[#222] border border-[#555] text-[10px] text-white px-1 w-1/2 focus:outline-none focus:border-green-500">
+                        <select id="newItemColor" class="bg-[#222] border border-[#555] text-[10px] text-gray-200 px-1 w-1/2 focus:outline-none cursor-pointer">
                             <option value="text-gray-400">Gris (Común)</option>
                             <option value="text-green-400">Verde (Uncommon)</option>
                             <option value="text-blue-400">Azul (Raro)</option>
@@ -780,17 +887,17 @@
                         </select>
                     </div>
                     <!-- RICH TEXT EDITOR -->
-                    <div class="border border-[#444] rounded bg-[#1a1a1a] mb-1">
-                        <div class="flex border-b border-[#444] bg-[#222]">
-                            <button onmousedown="event.preventDefault(); execCmd('bold')" class="p-1 text-gray-400 hover:text-white text-[10px] w-6 border-r border-[#444]"><i class="fas fa-bold"></i></button>
-                            <button onmousedown="event.preventDefault(); execCmd('italic')" class="p-1 text-gray-400 hover:text-white text-[10px] w-6 border-r border-[#444]"><i class="fas fa-italic"></i></button>
-                            <button onmousedown="event.preventDefault(); execCmd('underline')" class="p-1 text-gray-400 hover:text-white text-[10px] w-6 border-r border-[#444]"><i class="fas fa-underline"></i></button>
+                    <div class="border border-[#555] rounded bg-[#1a1a1a] mb-1">
+                        <div class="flex border-b border-[#555] bg-[#222]">
+                            <button onmousedown="event.preventDefault(); execCmd('bold')" class="p-1 text-gray-400 hover:text-white text-[10px] w-6 border-r border-[#555]"><i class="fas fa-bold"></i></button>
+                            <button onmousedown="event.preventDefault(); execCmd('italic')" class="p-1 text-gray-400 hover:text-white text-[10px] w-6 border-r border-[#555]"><i class="fas fa-italic"></i></button>
+                            <button onmousedown="event.preventDefault(); execCmd('underline')" class="p-1 text-gray-400 hover:text-white text-[10px] w-6 border-r border-[#555]"><i class="fas fa-underline"></i></button>
                             <button onmousedown="event.preventDefault(); execCmd('insertUnorderedList')" class="p-1 text-gray-400 hover:text-white text-[10px] w-6"><i class="fas fa-list-ul"></i></button>
                         </div>
-                        <div id="newItemDesc" class="p-1 text-[10px] text-gray-300 min-h-[40px] focus:outline-none max-h-[100px] overflow-y-auto rich-text" contenteditable="true"></div>
+                        <div id="newItemDesc" class="p-2 text-[10px] text-gray-200 min-h-[40px] focus:outline-none max-h-[100px] overflow-y-auto rich-text" contenteditable="true"></div>
                     </div>
                     <div class="flex gap-1 justify-end">
-                        <button onclick="addConsumable()" class="bg-[#333] hover:bg-green-700 text-white px-2 text-[10px] border border-[#444] transition w-full"><i class="fas fa-plus"></i> AÑADIR</button>
+                        <button onclick="addConsumable()" class="bg-[#333] hover:bg-green-700 text-white px-2 text-[10px] border border-[#555] transition w-full"><i class="fas fa-plus"></i> AÑADIR</button>
                     </div>
                 </div>
 
@@ -812,16 +919,16 @@
         // --- DATA DE OBJETOS ---
         // ... (Keep existing weapon/armor DB)
         let weaponsDB = [
-            { id: 'w_sierra', name: 'Daga Sierra "Destripadora"', type: '1h', rarity: 'rare', icon: 'fa-fan', stats: '1d10+1+BF (R) | Pen 2', desc: '<p class="mb-2 italic text-gray-500">"Modelo Gurk-Custom". Híbrido brutal con freno industrial.</p><ul class="list-disc pl-4 space-y-1 lore-list"><li><strong class="text-white">Desgarradora:</strong> Tira 2d10 al daño y quédate el alto.</li><li><strong class="text-white">Equilibrada:</strong> +10 a Parada.</li><li><strong class="text-red-400">Ruidosa:</strong> -20 Sigilo al encenderla.</li></ul>', color: 'text-blue-400' },
-            { id: 'w_tenedor', name: 'Cuchillo "El Tenedor"', type: '1h', rarity: 'uncommon', icon: 'fa-utensils', stats: '1d5+4 (R) | Pen 2', desc: '<p class="mb-2 italic text-gray-500">Herramienta de despiece monofilo.</p><ul class="list-disc pl-4 space-y-1 lore-list"><li><strong class="text-green-400">Canalizador:</strong> Si hieres, "Cata de Combate" es GRATIS.</li><li><strong class="text-gray-300">Arrojadiza:</strong> Alcance 5m.</li><li><strong class="text-gray-300">Utilidad:</strong> +10 Supervivencia al despiezar.</li></ul>', color: 'text-green-400' },
-            { id: 'w_rifle', name: 'Rifle Kroot (Dual)', type: '2h', rarity: 'common', icon: 'fa-crosshairs', stats: 'Disparo: 1d10+5 (E) | Melé: 1d10+4', desc: '<p class="mb-2 italic text-gray-500">Arma a Dos Manos. Adaptable.</p><ul class="list-disc pl-4 space-y-1 lore-list"><li><strong class="text-blue-400">Modo Disparo:</strong> 100m, Energía, Fiable.</li><li><strong class="text-red-400">Modo Melé:</strong> Cuchillas en cañón/culata.</li></ul>', color: 'text-gray-300' },
-            { id: 'w_mandibula', name: 'Mandíbula Trituradora', type: 'shield', rarity: 'epic', icon: 'fa-shield-alt', stats: '1d10+F (I) | +4 AP Escudo', desc: '<p class="mb-2 italic text-gray-500">Hueso de la Madre. Trofeo masivo.</p><ul class="list-disc pl-4 space-y-1 lore-list"><li><strong class="text-purple-400">Escudo Torre:</strong> +4 AP (Brazo/Cuerpo Izq).</li><li><strong class="text-red-400">Terror Primitivo:</strong> +10 Intimidar al rugir.</li><li><strong class="text-gray-300">Pesada:</strong> Requiere F45+.</li></ul>', color: 'text-purple-400' },
+            { id: 'w_sierra', name: 'Daga Sierra "Destripadora"', type: '1h', rarity: 'rare', icon: 'fa-fan', stats: '1d10+1+BF (R) | Pen 2', desc: '<p class="mb-2 italic text-gray-200">"Modelo Gurk-Custom". Híbrido brutal con freno industrial.</p><ul class="list-disc pl-4 space-y-1 lore-list"><li><strong class="text-white">Desgarradora:</strong> Tira 2d10 al daño y quédate el alto.</li><li><strong class="text-white">Equilibrada:</strong> +10 a Parada.</li><li><strong class="text-red-400">Ruidosa:</strong> -20 Sigilo al encenderla.</li></ul>', color: 'text-blue-400' },
+            { id: 'w_tenedor', name: 'Cuchillo "El Tenedor"', type: '1h', rarity: 'uncommon', icon: 'fa-utensils', stats: '1d5+4 (R) | Pen 2', desc: '<p class="mb-2 italic text-gray-200">Herramienta de despiece monofilo.</p><ul class="list-disc pl-4 space-y-1 lore-list"><li><strong class="text-green-400">Canalizador:</strong> Si hieres, "Cata de Combate" es GRATIS.</li><li><strong class="text-gray-300">Arrojadiza:</strong> Alcance 5m.</li><li><strong class="text-gray-300">Utilidad:</strong> +10 Supervivencia al despiezar.</li></ul>', color: 'text-green-400' },
+            { id: 'w_rifle', name: 'Rifle Kroot (Dual)', type: '2h', rarity: 'common', icon: 'fa-crosshairs', stats: 'Disparo: 1d10+5 (E) | Melé: 1d10+4', desc: '<p class="mb-2 italic text-gray-200">Arma a Dos Manos. Adaptable.</p><ul class="list-disc pl-4 space-y-1 lore-list"><li><strong class="text-blue-400">Modo Disparo:</strong> 100m, Energía, Fiable.</li><li><strong class="text-red-400">Modo Melé:</strong> Cuchillas en cañón/culata.</li></ul>', color: 'text-gray-300' },
+            { id: 'w_mandibula', name: 'Mandíbula Trituradora', type: 'shield', rarity: 'epic', icon: 'fa-shield-alt', stats: '1d10+F (I) | +4 AP Escudo', desc: '<p class="mb-2 italic text-gray-200">Hueso de la Madre. Trofeo masivo.</p><ul class="list-disc pl-4 space-y-1 lore-list"><li><strong class="text-purple-400">Escudo Torre:</strong> +4 AP (Brazo/Cuerpo Izq).</li><li><strong class="text-red-400">Terror Primitivo:</strong> +10 Intimidar al rugir.</li><li><strong class="text-gray-300">Pesada:</strong> Requiere F45+.</li></ul>', color: 'text-purple-400' },
             { id: 'w_unarmed', name: 'Puños / Garras', type: '1h', rarity: 'common', icon: 'fa-hand-rock', stats: '1d5+1 (I)', desc: '<ul class="list-disc pl-4 space-y-1 lore-list"><li><strong class="text-gray-300">Primitiva:</strong> La armadura enemiga cuenta doble.</li><li><strong class="text-gray-300">Presa:</strong> Permite iniciar Maniobras de Presa.</li></ul>', color: 'text-gray-500' }
         ];
 
         let armorDB = [
-            { id: 'a_chaleco', name: 'Chaleco "Suela de Tanko"', slot: 'body', rarity: 'common', icon: 'fa-vest', stats: 'AP 4 (Torso)', desc: '<p class="mb-2 italic text-gray-500">Goma vulcanizada. Huele a neumático quemado.</p><ul class="list-disc pl-4 space-y-1 lore-list"><li><strong class="text-green-400">Rebote:</strong> AP 6 vs Impacto/Caídas.</li><li><strong class="text-red-400">Inflamable:</strong> AP 0 vs Fuego. Se derrite (daño extra).</li><li><strong class="text-gray-300">Torpe:</strong> -10 Agilidad.</li></ul>', color: 'text-gray-300' },
-            { id: 'a_botas', name: 'Botaz de Rebote', slot: 'feet', rarity: 'rare', icon: 'fa-shoe-prints', stats: 'Salto x3', desc: '<p class="mb-2 italic text-gray-500">Muelles de suspensión oxidados.</p><ul class="list-disc pl-4 space-y-1 lore-list"><li><strong class="text-blue-400">¡Boing!:</strong> Salto x3 (Acción Movimiento).</li><li><strong class="text-red-400">Aterrizaje:</strong> Test AG (+0) o caes (Daño).</li><li><strong class="text-red-400">Ruidosas:</strong> -10 Sigilo/Velocidad.</li></ul>', color: 'text-blue-400' }
+            { id: 'a_chaleco', name: 'Chaleco "Suela de Tanko"', slot: 'body', rarity: 'common', icon: 'fa-vest', stats: 'AP 4 (Torso)', desc: '<p class="mb-2 italic text-gray-200">Goma vulcanizada. Huele a neumático quemado.</p><ul class="list-disc pl-4 space-y-1 lore-list"><li><strong class="text-green-400">Rebote:</strong> AP 6 vs Impacto/Caídas.</li><li><strong class="text-red-400">Inflamable:</strong> AP 0 vs Fuego. Se derrite (daño extra).</li><li><strong class="text-gray-300">Torpe:</strong> -10 Agilidad.</li></ul>', color: 'text-gray-300' },
+            { id: 'a_botas', name: 'Botaz de Rebote', slot: 'feet', rarity: 'rare', icon: 'fa-shoe-prints', stats: 'Salto x3', desc: '<p class="mb-2 italic text-gray-200">Muelles de suspensión oxidados.</p><ul class="list-disc pl-4 space-y-1 lore-list"><li><strong class="text-blue-400">¡Boing!:</strong> Salto x3 (Acción Movimiento).</li><li><strong class="text-red-400">Aterrizaje:</strong> Test AG (+0) o caes (Daño).</li><li><strong class="text-red-400">Ruidosas:</strong> -10 Sigilo/Velocidad.</li></ul>', color: 'text-blue-400' }
         ];
 
         const snacksDB = [
@@ -835,19 +942,19 @@
 
         let lootDB = [
             { name: "Spook (Fantasma)", effect: '<ul class="list-disc pl-4 lore-list"><li><strong class="text-green-400">Viaje:</strong> +20 PER / Psíquico Nvl 1.</li><li><strong class="text-red-400">Peligro:</strong> Detectado por S-99. +1d5 Corrupción.</li></ul>', color: "text-green-400", type: "drug" },
-            { name: "Éxtasis de Navaja", effect: '<ul class="list-disc pl-4 lore-list"><li><strong class="text-purple-400">Subidón:</strong> +20 AG/HA, Iniciativa Doble (1d10 rondas).</li><li><strong class="text-gray-500">Bajón:</strong> Depresión (-10).</li></ul>', color: "text-purple-400", type: "drug" },
-            { name: "Obscura", effect: '<ul class="list-disc pl-4 lore-list"><li><strong class="text-gray-400">Trance:</strong> Inmune Miedo/Fatiga/Pinning.</li><li><strong class="text-red-400">Resaca:</strong> -10 Vol/Int, -20 Emp.</li></ul>', color: "text-gray-300", type: "drug" },
+            { name: "Éxtasis de Navaja", effect: '<ul class="list-disc pl-4 lore-list"><li><strong class="text-purple-400">Subidón:</strong> +20 AG/HA, Iniciativa Doble (1d10 rondas).</li><li><strong class="text-gray-300">Bajón:</strong> Depresión (-10).</li></ul>', color: "text-purple-400", type: "drug" },
+            { name: "Obscura", effect: '<ul class="list-disc pl-4 lore-list"><li><strong class="text-gray-300">Trance:</strong> Inmune Miedo/Fatiga/Pinning.</li><li><strong class="text-red-400">Resaca:</strong> -10 Vol/Int, -20 Emp.</li></ul>', color: "text-gray-300", type: "drug" },
             { name: "Inyector Zoat", effect: '<ul class="list-disc pl-4 lore-list"><li><strong class="text-orange-400">Xenos:</strong> Cura 1d10+R. Quita Toxinas/Fatiga.</li><li><strong class="text-red-400">Rechazo:</strong> Test R o Aturdido+Daño. +Corr.</li></ul>', color: "text-orange-400", type: "drug" },
-            { name: "Neuro-estabilizador", effect: '<ul class="list-disc pl-4 lore-list"><li><strong class="text-blue-300">Mente Fría:</strong> Quita Miedo/Pinning. +20 Vol/Int.</li><li><strong class="text-gray-500">Apatía:</strong> -30 Empatía.</li></ul>', color: "text-blue-300", type: "drug" },
+            { name: "Neuro-estabilizador", effect: '<ul class="list-disc pl-4 lore-list"><li><strong class="text-blue-300">Mente Fría:</strong> Quita Miedo/Pinning. +20 Vol/Int.</li><li><strong class="text-gray-300">Apatía:</strong> -30 Empatía.</li></ul>', color: "text-blue-300", type: "drug" },
             { name: "Medkit Lázaro", effect: '<ul class="list-disc pl-4 lore-list"><li><strong class="text-green-400">Cirugía:</strong> +20 Medicae.</li><li><strong class="text-red-400">Stimm:</strong> Quita Fatiga/Stun.</li><li><strong class="text-blue-400">Espuma:</strong> Sella Sangrado auto.</li></ul>', color: "text-green-200", uses: 3, type: "kit" },
-            { name: "Medkit Imperialis", effect: '<ul class="list-disc pl-4 lore-list"><li><strong class="text-gray-400">Básico:</strong> Evita penalizador -20.</li></ul>', color: "text-gray-400", type: "kit" },
+            { name: "Medkit Imperialis", effect: '<ul class="list-disc pl-4 lore-list"><li><strong class="text-gray-300">Básico:</strong> Evita penalizador -20.</li></ul>', color: "text-gray-400", type: "kit" },
             { name: "Kit Dientes-Flojos", effect: '<ul class="list-disc pl-4 lore-list"><li><strong class="text-yellow-600">Apaño:</strong> Repetir 1 tirada de Tecnología.</li></ul>', color: "text-yellow-600", type: "kit" },
             { name: "Vendas Estériles", effect: '<ul class="list-disc pl-4 lore-list"><li><strong class="text-white">Auxilio:</strong> +20 Primeros Auxilios. +1d5 Heridas extra.</li></ul>', color: "text-white", type: "item" },
             { name: "Lata Aceite Industrial", effect: '<ul class="list-disc pl-4 lore-list"><li><strong class="text-yellow-500">Mantenimiento:</strong> Arma se vuelve "Fiable".</li></ul>', color: "text-yellow-500", type: "item" },
             { name: "Mod: El Kallador", effect: '<ul class="list-disc pl-4 lore-list"><li><strong class="text-red-400">Ruidoso:</strong> +Intimidar, -Sigilo.</li></ul>', color: "text-red-400", type: "mod" },
             { name: "Pelusa Orko", effect: '<ul class="list-disc pl-4 lore-list"><li><strong class="text-green-600">Inútil:</strong> -5 Empatía si se come.</li></ul>', color: "text-green-600", type: "trash" },
             { name: "Bocadillo Moho", effect: '<ul class="list-disc pl-4 lore-list"><li><strong class="text-yellow-700">Rancio:</strong> +1 Herida, +2 Hambre.</li></ul>', color: "text-yellow-700", type: "trash" },
-            { name: "Rata Muerta", effect: '<ul class="list-disc pl-4 lore-list"><li><strong class="text-gray-500">Riesgo:</strong> Test R: Nutrición o Náuseas.</li></ul>', color: "text-gray-500", type: "trash" },
+            { name: "Rata Muerta", effect: '<ul class="list-disc pl-4 lore-list"><li><strong class="text-gray-300">Riesgo:</strong> Test R: Nutrición o Náuseas.</li></ul>', color: "text-gray-500", type: "trash" },
             { name: "Licor Hongo", effect: '<ul class="list-disc pl-4 lore-list"><li><strong class="text-red-500">Molotov:</strong> 1d10 Fuego (Lanzar).</li><li><strong class="text-green-500">Beber:</strong> Vigor, Ceguera o Daño.</li></ul>', color: "text-green-500", type: "trash" }
         ];
 
@@ -975,8 +1082,8 @@
                 }
             });
 
-            if (!hasItems) {
-                container.innerHTML = '<div class="text-center text-gray-600 text-[10px] italic p-2 border border-dashed border-gray-700 rounded">Sin equipo activo</div>';
+                    if (!hasItems) {
+                container.innerHTML = '<div class="text-center text-gray-400 text-[10px] italic p-2 border border-dashed border-gray-700 rounded">Sin equipo activo</div>';
             }
         }
 
@@ -997,7 +1104,7 @@
                             <i class="fas ${item.icon} ${item.color} w-5 text-center shrink-0"></i>
                             <div class="min-w-0 flex-grow">
                                 <div class="font-bold ${item.color} truncate text-xs">${item.name}</div>
-                                <div class="text-[9px] text-gray-500 truncate">${item.type.toUpperCase()} <span class="text-gray-600">|</span> ${item.stats}</div>
+                                <div class="text-[9px] text-gray-300 truncate">${item.type.toUpperCase()} <span class="text-gray-400">|</span> ${item.stats}</div>
                             </div>
                         </div>
                         <div class="flex items-center gap-2 shrink-0 ml-2">
@@ -1005,7 +1112,7 @@
                             <button onclick="deleteWeapon(${index}); event.preventDefault();" class="text-[#444] hover:text-red-500 text-[10px] p-1"><i class="fas fa-trash"></i></button>
                         </div>
                     </summary>
-                    <div class="px-2 pb-2 text-[10px] text-gray-400 bg-[#111] leading-tight border-t border-[#222] pt-2 rich-text">
+                    <div class="px-2 pb-2 text-[10px] text-gray-200 bg-[#111] leading-tight border-t border-[#222] pt-2 rich-text">
                         ${item.desc}
                     </div>
                 `;
@@ -1035,7 +1142,7 @@
                             <i class="fas ${item.icon} ${item.color} w-5 text-center shrink-0"></i>
                             <div class="min-w-0 flex-grow">
                                 <div class="font-bold ${item.color} truncate text-xs">${item.name}</div>
-                                <div class="text-[9px] text-gray-500 truncate">${item.slot.toUpperCase()} <span class="text-gray-600">|</span> ${item.stats}</div>
+                                <div class="text-[9px] text-gray-300 truncate">${item.slot.toUpperCase()} <span class="text-gray-400">|</span> ${item.stats}</div>
                             </div>
                         </div>
                         <div class="flex items-center gap-2 shrink-0 ml-2">
@@ -1043,7 +1150,7 @@
                             <button onclick="deleteArmor(${index}); event.preventDefault();" class="text-[#444] hover:text-red-500 text-[10px] p-1"><i class="fas fa-trash"></i></button>
                         </div>
                     </summary>
-                    <div class="px-2 pb-2 text-[10px] text-gray-400 bg-[#111] leading-tight border-t border-[#222] pt-2 rich-text">
+                    <div class="px-2 pb-2 text-[10px] text-gray-200 bg-[#111] leading-tight border-t border-[#222] pt-2 rich-text">
                         ${item.desc}
                     </div>
                 `;
@@ -1068,7 +1175,7 @@
                         <div class="flex justify-between items-center mb-0.5">
                             <span class="text-xs font-bold ${item.color} truncate pr-2">${item.name}</span>
                         </div>
-                        <div class="text-[10px] text-gray-500 leading-tight break-words rich-text">${item.effect}</div>
+                        <div class="text-[10px] text-gray-200 leading-tight break-words rich-text">${item.effect}</div>
                     </div>
                     <div class="shrink-0 pt-1 flex gap-1">${checksHtml}</div>
                 `;
@@ -1092,7 +1199,7 @@
                         <div class="flex justify-between items-center mb-0.5">
                             <span class="text-xs font-bold ${item.color} truncate pr-2">${item.name}</span>
                         </div>
-                        <div class="text-[10px] text-gray-500 leading-tight break-words rich-text">${item.effect}</div>
+                        <div class="text-[10px] text-gray-200 leading-tight break-words rich-text">${item.effect}</div>
                     </div>
                     <div class="flex flex-col items-end gap-1 shrink-0">
                         <div class="flex gap-1">${checksHtml}</div>
@@ -1120,11 +1227,11 @@
                             <span class="font-bold text-xs ${buff.text}">${buff.title}</span>
                         </div>
                         <div class="flex items-center gap-2">
-                            <i class="fas fa-chevron-down text-[10px] text-gray-500 group-open:rotate-180 transition"></i>
-                            <button onclick="deleteBuff(${index}); event.preventDefault();" class="text-gray-600 hover:text-red-500 px-1"><i class="fas fa-times"></i></button>
+                            <i class="fas fa-chevron-down text-[10px] text-gray-200 group-open:rotate-180 transition"></i>
+                            <button onclick="deleteBuff(${index}); event.preventDefault();" class="text-gray-300 hover:text-red-500 px-1"><i class="fas fa-times"></i></button>
                         </div>
                     </summary>
-                    <div class="px-2 pb-2 text-[10px] text-gray-400 whitespace-pre-wrap leading-tight border-t border-[#333] pt-2 rich-text">
+                    <div class="px-2 pb-2 text-[10px] text-gray-200 whitespace-pre-wrap leading-tight border-t border-[#333] pt-2 rich-text">
                         ${buff.desc}
                     </div>
                 `;
@@ -1154,7 +1261,7 @@
             }
 
             // Map color class to text color class
-            let textClass = 'text-gray-400';
+            let textClass = 'text-gray-200';
             if (colorClass === 'buff-green') textClass = 'text-green-400';
             else if (colorClass === 'buff-purple') textClass = 'text-purple-400';
             else if (colorClass === 'buff-red') textClass = 'text-red-400';
@@ -1357,7 +1464,7 @@
                     el.classList.add('opacity-25', 'cursor-not-allowed');
                     el.innerHTML = `<i class="fas fa-ban text-red-900"></i>`; 
                 } else {
-                    el.innerHTML = `<i class="fas ${defaultIcon} text-gray-700"></i>`;
+                    el.innerHTML = `<i class="fas ${defaultIcon} text-gray-300"></i>`;
                 }
                 return;
             }
@@ -1368,7 +1475,7 @@
                 <div class="item-tooltip">
                     <div class="font-bold ${item.color} mb-1 border-b border-gray-600 pb-1">${item.name}</div>
                     <div class="text-[10px] text-white font-mono mb-1 bg-black/50 p-1 rounded">${item.stats}</div>
-                    <div class="text-[9px] text-gray-400 italic leading-tight">${item.desc}</div>
+                    <div class="text-[9px] text-gray-200 italic leading-tight">${item.desc}</div>
                 </div>
             `;
         }
