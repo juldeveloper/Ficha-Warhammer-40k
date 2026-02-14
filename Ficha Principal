@@ -226,6 +226,32 @@
         .rich-text i, .rich-text em { font-style: italic; }
         .rich-text u { text-decoration: underline; }
         .rich-text p { margin-bottom: 4px; }
+        
+        /* Lore Specific */
+        .lore-header summary { outline: none; }
+
+        /* Editor Toolbar */
+        .editor-toolbar {
+            display: flex;
+            background: #222;
+            border-bottom: 1px solid #444;
+            padding: 2px;
+        }
+        .editor-toolbar button {
+            padding: 2px 6px;
+            font-size: 10px;
+            color: #aaa;
+            border-right: 1px solid #333;
+        }
+        .editor-toolbar button:hover { color: #fff; background: #333; }
+        .editor-content {
+            padding: 4px;
+            min-height: 50px;
+            background: #1a1a1a;
+            color: #ccc;
+            font-size: 11px;
+            outline: none;
+        }
 
         /* Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
@@ -238,25 +264,58 @@
     
     <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-6 h-full">
 
-        <!-- HEADER SECTION -->
-        <header class="lg:col-span-12 panel p-4 flex flex-col md:flex-row justify-between items-center border-t-4 border-t-green-600 shrink-0 h-auto">
-            <div class="flex items-center gap-4">
-                <div class="h-16 w-16 bg-cover bg-center rounded border border-gray-600 shadow-inner" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_S2h2i0H9O_XnK_-z-JvXN2d_2Xy5s6tH_g&usqp=CAU'); filter: grayscale(50%);"></div>
-                <div>
-                    <h1 class="text-3xl font-bold text-white uppercase tracking-wider">Rastreador Kroot</h1>
-                    <div class="flex gap-2 text-xs font-mono text-gray-400 mt-1">
-                        <span class="bg-[#222] px-2 py-0.5 rounded border border-gray-700">MERCENARIO GOURMET</span>
-                        <span class="bg-[#222] px-2 py-0.5 rounded border border-gray-700">JAURÍA DE GURK</span>
+        <!-- HEADER SECTION (AHORA EXPANDIBLE CON LORE) -->
+        <details class="lg:col-span-12 panel border-t-4 border-t-green-600 shrink-0 group lore-header">
+            <summary class="p-4 flex flex-col md:flex-row justify-between items-center cursor-pointer hover:bg-white/5 transition">
+                <div class="flex items-center gap-4">
+                    <div class="h-16 w-16 bg-cover bg-center rounded border border-gray-600 shadow-inner" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_S2h2i0H9O_XnK_-z-JvXN2d_2Xy5s6tH_g&usqp=CAU'); filter: grayscale(50%);"></div>
+                    <div>
+                        <h1 class="text-3xl font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                            Rastreador Kroot
+                            <i class="fas fa-chevron-down text-xs text-gray-500 group-open:rotate-180 transition"></i>
+                        </h1>
+                        <div class="flex gap-2 text-xs font-mono text-gray-400 mt-1">
+                            <span class="bg-[#222] px-2 py-0.5 rounded border border-gray-700">MERCENARIO GOURMET</span>
+                            <span class="bg-[#222] px-2 py-0.5 rounded border border-gray-700">JAURÍA DE GURK</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4 md:mt-0 text-right space-y-1">
+                    <div class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Estado Operativo</div>
+                    <div class="text-xl text-green-500 font-bold font-mono">ANGRYHANDS</div>
+                    <div class="text-xs text-gray-400">Objetivo: <span class="text-white">Skrag</span> (Bajoz Fondoz)</div>
+                </div>
+            </summary>
+
+            <!-- LORE CONTENT (Kroot-1.pdf) -->
+            <div class="p-4 pt-0 border-t border-gray-800 bg-[#0d0d0d] rich-text">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                    <!-- Perfil -->
+                    <div>
+                        <h4 class="text-green-500 font-bold uppercase text-xs mb-2 border-b border-green-900 pb-1">Perfil: El Anticuerpo de la Nave</h4>
+                        <p class="text-xs text-gray-400 mb-2 italic">"La nave es un buffet. Tú decides quién llega al postre."</p>
+                        <ul class="text-[11px] space-y-1 text-gray-400 list-none pl-0">
+                            <li><strong class="text-gray-300">Rol:</strong> Tanque Biológico, DPS Melé y Ladrón.</li>
+                            <li><strong class="text-gray-300">Misión:</strong> Correo de Lady Viraque. Llevar viales químicos a Skrag.</li>
+                            <li><strong class="text-gray-300">Filosofía:</strong> Lo que no te mata, te hace más fuerte. Y lo que no está clavado, es tuyo.</li>
+                            <li><strong class="text-gray-300">Vicio:</strong> Cleptomanía (Si ves bolsillos, metes la mano).</li>
+                        </ul>
+                    </div>
+                    <!-- Tabú -->
+                    <div>
+                        <h4 class="text-red-500 font-bold uppercase text-xs mb-2 border-b border-red-900 pb-1">El Tabú de Gurk (Regla de Oro)</h4>
+                        <p class="text-[11px] text-gray-400 mb-2">Prohibido terminantemente consumir los siguientes tejidos:</p>
+                        <ul class="text-[11px] text-red-400 space-y-1 list-none pl-0">
+                            <li><i class="fas fa-ban mr-1"></i> <strong>Orkos:</strong> Esporas contagiosas.</li>
+                            <li><i class="fas fa-ban mr-1"></i> <strong>Tiránidos:</strong> La "Hambre Maldita".</li>
+                            <li><i class="fas fa-ban mr-1"></i> <strong>Comida Procesada:</strong> "Ceniza" humana.</li>
+                        </ul>
+                        <p class="text-[10px] text-gray-500 mt-2 italic">Romper el tabú tiene consecuencias evolutivas graves.</p>
                     </div>
                 </div>
             </div>
-            
-            <div class="mt-4 md:mt-0 text-right space-y-1">
-                <div class="text-[10px] text-gray-500 uppercase tracking-widest">Estado Actual</div>
-                <div class="text-xl text-green-500 font-bold font-mono">EN MISIÓN: CORREO</div>
-                <div class="text-xs text-gray-400">Objetivo: <span class="text-white">Skrag</span> (Bajoz Fondoz)</div>
-            </div>
-        </header>
+        </details>
 
         <!-- LEFT COLUMN: Stats, Vitals, Hunger & Buffs -->
         <div class="lg:col-span-4 space-y-4 overflow-y-auto pr-2 pb-20">
@@ -566,29 +625,13 @@
 
                 <!-- ACTIVE BUFFS / PROTOCOLS DISPLAY -->
                 <div class="mt-8 p-3 bg-[#0a0a0a] border-t border-[#222]">
-                    <!-- Cata de Combate Card -->
-                    <details class="buff-card buff-blue group mb-2">
-                        <summary class="p-2 text-[10px] text-blue-400 font-bold uppercase flex items-center gap-2 cursor-pointer select-none">
-                            <i class="fas fa-tongue-style"></i> Cata de Combate (Activa)
-                        </summary>
-                        <div class="px-2 pb-2 text-[10px] text-gray-400 rich-text">
-                            <p class="mb-1 italic">"La lengua es un laboratorio."</p>
-                            <ul class="list-disc pl-4 space-y-1 lore-list">
-                                <li><strong class="text-white">Coste:</strong> Media Acción (Melé).</li>
-                                <li><strong class="text-green-400">Efecto:</strong> +10 Impactar / +2 Daño contra ese enemigo.</li>
-                            </ul>
-                            <div class="mt-2 pt-2 border-t border-gray-700 grid grid-cols-2 gap-1 text-[9px]">
-                                <div><strong class="text-blue-400">1. Ácido:</strong> +Esq</div>
-                                <div><strong class="text-gray-400">2. Óxido:</strong> -1 AP</div>
-                                <div><strong class="text-purple-400">3. Miedo:</strong> +Intim</div>
-                                <div><strong class="text-green-400">4. Tóxico:</strong> +Daño</div>
-                                <div><strong class="text-yellow-400">5. Energía:</strong> Prever</div>
-                                <div><strong class="text-red-500">6. Umami:</strong> Frenesí</div>
-                            </div>
-                        </div>
-                    </details>
+                    <!-- ACTIVE GEAR DETAILS BOX -->
+                    <div class="panel-header mt-2 border-t border-[#333] bg-transparent pl-0 text-blue-400">Detalles de Equipo Activo</div>
+                    <div id="active-gear-info" class="space-y-1 mt-1">
+                        <!-- Filled by JS -->
+                    </div>
 
-                    <div id="protocol-display" class="hidden bg-orange-900/20 border border-orange-700/50 p-2 rounded flex items-center justify-between mb-2 animate-pulse">
+                    <div id="protocol-display" class="hidden bg-orange-900/20 border border-orange-700/50 p-2 rounded flex items-center justify-between mb-2 mt-4 animate-pulse">
                         <span class="text-orange-500 text-xs font-bold uppercase"><i class="fas fa-bolt mr-1"></i> Protocolo: Gran Trinchante</span>
                         <span class="text-[9px] text-gray-400">Daga + Tenedor activos</span>
                     </div>
@@ -879,6 +922,64 @@
             if(!equipped.feet) equipArmor('a_botas');
         }
 
+        // --- UPDATE ACTIVE GEAR INFO ---
+        function updateActiveGearInfo() {
+            const container = document.getElementById('active-gear-info');
+            if(!container) return;
+            
+            container.innerHTML = '';
+            
+            const slots = [
+                { key: 'main', label: 'M. Principal' },
+                { key: 'off', label: 'Secundaria' },
+                { key: 'head', label: 'Cabeza' },
+                { key: 'body', label: 'Torso' },
+                { key: 'hands', label: 'Guantes' },
+                { key: 'wrists', label: 'Muñecas' },
+                { key: 'legs', label: 'Piernas' },
+                { key: 'feet', label: 'Pies' },
+                { key: 'trinket1', label: 'Abalorio 1' },
+                { key: 'trinket2', label: 'Abalorio 2' }
+            ];
+
+            let hasItems = false;
+
+            slots.forEach(slot => {
+                const item = equipped[slot.key];
+                if (item) {
+                    hasItems = true;
+                    const el = document.createElement('details');
+                    // Colors based on item rarity/type if possible, or default blue/green
+                    let borderColor = 'buff-blue';
+                    let titleColor = 'text-blue-400';
+                    
+                    if (item.rarity === 'rare') { borderColor = 'buff-purple'; titleColor = 'text-purple-400'; }
+                    if (item.rarity === 'epic') { borderColor = 'buff-red'; titleColor = 'text-red-400'; }
+                    if (item.rarity === 'uncommon') { borderColor = 'buff-green'; titleColor = 'text-green-400'; }
+
+                    el.className = `buff-card ${borderColor} group`;
+                    el.innerHTML = `
+                        <summary class="p-2 flex justify-between items-center cursor-pointer select-none hover:bg-white/5 transition">
+                            <div class="flex items-center gap-2 overflow-hidden">
+                                <i class="fas ${item.icon} ${titleColor} w-4 text-center shrink-0"></i>
+                                <span class="font-bold text-[10px] ${titleColor} uppercase truncate">${slot.label}: ${item.name}</span>
+                            </div>
+                            <i class="fas fa-chevron-down text-[9px] text-gray-500 group-open:rotate-180 transition"></i>
+                        </summary>
+                        <div class="px-2 pb-2 text-[10px] text-gray-400 border-t border-[#333] pt-2 rich-text bg-black/20">
+                            <div class="mb-1 text-white font-mono text-[9px]">${item.stats}</div>
+                            ${item.desc}
+                        </div>
+                    `;
+                    container.appendChild(el);
+                }
+            });
+
+            if (!hasItems) {
+                container.innerHTML = '<div class="text-center text-gray-600 text-[10px] italic p-2 border border-dashed border-gray-700 rounded">Sin equipo activo</div>';
+            }
+        }
+
         // ... (Rest of functions remain similar, ensuring innerHTML is used)
         function renderWeapons() {
             const list = document.getElementById('inventory-list');
@@ -1155,100 +1256,226 @@
         function equipWeapon(id) {
             const item = weaponsDB.find(w => w.id === id);
             if (!item) return;
+
             if (item.type === '2h') {
-                equipped.main = item; equipped.off = null;
-                updateSlot('main', item); updateSlot('off', null, true);
+                equipped.main = item;
+                equipped.off = null;
+                updateSlot('main', item);
+                updateSlot('off', null, true);
                 document.getElementById('2h-warning').classList.remove('hidden');
             } else {
                 document.getElementById('2h-warning').classList.add('hidden');
                 if (equipped.main && equipped.main.type === '2h') { equipped.main = null; updateSlot('main', null); }
+                
                 if (!equipped.main) { equipped.main = item; updateSlot('main', item); }
                 else if (!equipped.off) { equipped.off = item; updateSlot('off', item); }
                 else { equipped.main = item; updateSlot('main', item); }
             }
-            checkProtocols(); renderWeapons();
+            checkProtocols();
+            renderWeapons(); // Update buttons
+            updateActiveGearInfo();
         }
+
         function unequipWeaponById(id) {
             if (equipped.main && equipped.main.id === id) unequip('main');
             else if (equipped.off && equipped.off.id === id) unequip('off');
         }
+
         function equipArmor(id) {
             const item = armorDB.find(a => a.id === id);
             if(!item) return;
+
             if (item.slot === 'trinket') {
-                if (!equipped.trinket1) { equipped.trinket1 = item; updateSlot('trinket1', item); }
-                else if (!equipped.trinket2) { equipped.trinket2 = item; updateSlot('trinket2', item); }
-                else { equipped.trinket1 = item; updateSlot('trinket1', item); }
-            } else { equipped[item.slot] = item; updateSlot(item.slot, item); }
+                // Trinket logic: fill 1, then 2, then swap 1
+                if (!equipped.trinket1) {
+                    equipped.trinket1 = item;
+                    updateSlot('trinket1', item);
+                } else if (!equipped.trinket2) {
+                    equipped.trinket2 = item;
+                    updateSlot('trinket2', item);
+                } else {
+                    equipped.trinket1 = item; // Swap 1
+                    updateSlot('trinket1', item);
+                }
+            } else {
+                // Standard slot
+                equipped[item.slot] = item;
+                updateSlot(item.slot, item);
+            }
             renderArmor();
+            updateActiveGearInfo();
         }
+
         function unequipArmorById(id) {
+            // Find where it is equipped
             const item = armorDB.find(a => a.id === id);
             if (!item) return;
-            if (item.slot === 'trinket') { if (equipped.trinket1 && equipped.trinket1.id === id) unequip('trinket1'); else if (equipped.trinket2 && equipped.trinket2.id === id) unequip('trinket2'); }
-            else { if (equipped[item.slot] && equipped[item.slot].id === id) unequip(item.slot); }
+
+            if (item.slot === 'trinket') {
+                if (equipped.trinket1 && equipped.trinket1.id === id) unequip('trinket1');
+                else if (equipped.trinket2 && equipped.trinket2.id === id) unequip('trinket2');
+            } else {
+                if (equipped[item.slot] && equipped[item.slot].id === id) unequip(item.slot);
+            }
         }
+
         function unequip(slot) {
-            equipped[slot] = null; updateSlot(slot, null);
+            equipped[slot] = null;
+            updateSlot(slot, null);
             if(slot === 'main' || slot === 'off') {
                 document.getElementById('2h-warning').classList.add('hidden');
                 if (slot === 'main') updateSlot('off', equipped.off);
-                checkProtocols(); renderWeapons();
-            } else { renderArmor(); }
+                checkProtocols();
+                renderWeapons();
+            } else {
+                renderArmor();
+            }
+            updateActiveGearInfo();
         }
+
+        // --- UI CORE ---
         function updateSlot(slotId, item, blocked = false) {
             const el = document.getElementById(`slot-${slotId}`);
             if(!el) return;
-            el.className = 'gear-slot'; el.innerHTML = '';
+            el.className = 'gear-slot';
+            el.innerHTML = '';
+            
             let defaultIcon = '';
-            if(slotId === 'main') defaultIcon = 'fa-fist-raised'; if(slotId === 'off') defaultIcon = 'fa-hand-paper';
-            if(slotId === 'head') defaultIcon = 'fa-helmet-safety'; if(slotId === 'body') defaultIcon = 'fa-vest';
-            if(slotId === 'hands') defaultIcon = 'fa-mitten'; if(slotId === 'wrists') defaultIcon = 'fa-ring';
-            if(slotId === 'legs') defaultIcon = 'fa-socks'; if(slotId === 'feet') defaultIcon = 'fa-boot';
+            if(slotId === 'main') defaultIcon = 'fa-fist-raised';
+            if(slotId === 'off') defaultIcon = 'fa-hand-paper';
+            if(slotId === 'head') defaultIcon = 'fa-helmet-safety';
+            if(slotId === 'body') defaultIcon = 'fa-vest';
+            if(slotId === 'hands') defaultIcon = 'fa-mitten';
+            if(slotId === 'wrists') defaultIcon = 'fa-ring';
+            if(slotId === 'legs') defaultIcon = 'fa-socks';
+            if(slotId === 'feet') defaultIcon = 'fa-boot';
             if(slotId === 'trinket1' || slotId === 'trinket2') defaultIcon = 'fa-gem';
+
             if (!item) {
                 el.classList.add('border-dashed', 'border-gray-600');
-                if(blocked) { el.classList.add('opacity-25', 'cursor-not-allowed'); el.innerHTML = `<i class="fas fa-ban text-red-900"></i>`; } 
-                else { el.innerHTML = `<i class="fas ${defaultIcon} text-gray-700"></i>`; }
+                if(blocked) {
+                    el.classList.add('opacity-25', 'cursor-not-allowed');
+                    el.innerHTML = `<i class="fas fa-ban text-red-900"></i>`; 
+                } else {
+                    el.innerHTML = `<i class="fas ${defaultIcon} text-gray-700"></i>`;
+                }
                 return;
             }
+
             el.classList.add('filled', item.rarity);
-            el.innerHTML = `<i class="fas ${item.icon} text-white"></i><div class="item-tooltip"><div class="font-bold ${item.color} mb-1 border-b border-gray-600 pb-1">${item.name}</div><div class="text-[10px] text-white font-mono mb-1 bg-black/50 p-1 rounded">${item.stats}</div><div class="text-[9px] text-gray-400 italic leading-tight">${item.desc}</div></div>`;
+            el.innerHTML = `
+                <i class="fas ${item.icon} text-white"></i>
+                <div class="item-tooltip">
+                    <div class="font-bold ${item.color} mb-1 border-b border-gray-600 pb-1">${item.name}</div>
+                    <div class="text-[10px] text-white font-mono mb-1 bg-black/50 p-1 rounded">${item.stats}</div>
+                    <div class="text-[9px] text-gray-400 italic leading-tight">${item.desc}</div>
+                </div>
+            `;
         }
+
         function checkProtocols() {
             const proto = document.getElementById('protocol-display');
-            if (equipped.main && equipped.off && ((equipped.main.id === 'w_sierra' && equipped.off.id === 'w_tenedor') || (equipped.main.id === 'w_tenedor' && equipped.off.id === 'w_sierra'))) { proto.classList.remove('hidden'); } 
-            else { proto.classList.add('hidden'); }
+            if (equipped.main && equipped.off && 
+               ((equipped.main.id === 'w_sierra' && equipped.off.id === 'w_tenedor') || 
+                (equipped.main.id === 'w_tenedor' && equipped.off.id === 'w_sierra'))) {
+                proto.classList.remove('hidden');
+            } else {
+                proto.classList.add('hidden');
+            }
         }
+
         function showToast(msg) {
             let toast = document.getElementById('toast-msg');
-            if (!toast) { toast = document.createElement('div'); toast.id = 'toast-msg'; toast.className = 'fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-red-900 border border-red-500 text-white px-4 py-2 rounded shadow-[0_0_15px_rgba(239,68,68,0.5)] text-xs font-bold z-50 transition-opacity duration-300 pointer-events-none opacity-0'; document.body.appendChild(toast); }
-            toast.innerText = msg; toast.classList.remove('opacity-0');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'toast-msg';
+                toast.className = 'fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-red-900 border border-red-500 text-white px-4 py-2 rounded shadow-[0_0_15px_rgba(239,68,68,0.5)] text-xs font-bold z-50 transition-opacity duration-300 pointer-events-none opacity-0';
+                document.body.appendChild(toast);
+            }
+            toast.innerText = msg;
+            toast.classList.remove('opacity-0');
             if(window.toastTimeout) clearTimeout(window.toastTimeout);
             window.toastTimeout = setTimeout(() => { toast.classList.add('opacity-0'); }, 2000);
         }
-        function modVal(id, change) { const input = document.getElementById(id); if(input) { let current = parseInt(input.value) || 0; input.value = current + change; input.style.color = change > 0 ? '#4ade80' : '#f87171'; setTimeout(() => input.style.color = '', 300); } }
+
+        // --- STATS ---
+        function modVal(id, change) {
+            const input = document.getElementById(id);
+            if(input) {
+                let current = parseInt(input.value) || 0;
+                input.value = current + change;
+                input.style.color = change > 0 ? '#4ade80' : '#f87171';
+                setTimeout(() => input.style.color = '', 300);
+            }
+        }
+
         function roll(sides) {
-            const display = document.getElementById('rollResult'); let count = 0; const max = 10;
+            const display = document.getElementById('rollResult');
+            let count = 0;
+            const max = 10;
             const interval = setInterval(() => {
-                display.innerText = Math.floor(Math.random() * sides) + 1; count++;
-                if(count >= max) { clearInterval(interval); const final = Math.floor(Math.random() * sides) + 1; display.innerText = final; display.className = 'text-2xl font-mono font-bold ' + (final === sides || (sides===100 && final <=10) ? 'text-green-500' : (final===1 || (sides===100 && final >=90) ? 'text-red-500' : 'text-white')); }
+                display.innerText = Math.floor(Math.random() * sides) + 1;
+                count++;
+                if(count >= max) {
+                    clearInterval(interval);
+                    const final = Math.floor(Math.random() * sides) + 1;
+                    display.innerText = final;
+                    display.className = 'text-2xl font-mono font-bold ' + (final === sides || (sides===100 && final <=10) ? 'text-green-500' : (final===1 || (sides===100 && final >=90) ? 'text-red-500' : 'text-white'));
+                }
             }, 50);
         }
+
         let hunger = 10;
         function updateHunger(amount) {
-            hunger = Math.min(10, Math.max(0, hunger + amount)); document.getElementById('hungerValue').innerText = hunger;
+            hunger = Math.min(10, Math.max(0, hunger + amount));
+            document.getElementById('hungerValue').innerText = hunger;
             const die = document.querySelector('.hunger-die');
-            document.getElementById('status-10').style.opacity = '0.3'; document.getElementById('status-6').style.opacity = '0.3'; document.getElementById('status-3').style.opacity = '0.3'; document.getElementById('status-0').style.opacity = '0.3';
-            die.className = "hunger-die shadow-none transition-all duration-300 border-gray-700 text-gray-500";
-            if (hunger >= 7) { die.classList.add('text-green-400', 'border-green-500'); die.style.boxShadow = '0 0 15px rgba(74, 222, 128, 0.3)'; document.getElementById('status-10').style.opacity = '1'; } 
-            else if (hunger >= 4) { die.classList.add('text-yellow-400', 'border-yellow-500'); die.style.boxShadow = '0 0 15px rgba(250, 204, 21, 0.3)'; document.getElementById('status-6').style.opacity = '1'; } 
-            else if (hunger >= 1) { die.classList.add('text-red-400', 'border-red-500'); die.style.boxShadow = '0 0 15px rgba(248, 113, 113, 0.4)'; document.getElementById('status-3').style.opacity = '1'; } 
-            else { die.classList.add('text-red-600', 'border-red-700', 'animate-pulse'); document.getElementById('status-0').style.opacity = '1'; }
+            
+            // Visual Update
+            document.getElementById('status-10').style.opacity = '0.3';
+            document.getElementById('status-6').style.opacity = '0.3';
+            document.getElementById('status-3').style.opacity = '0.3';
+            document.getElementById('status-0').style.opacity = '0.3';
+            die.className = "hunger-die shadow-none transition-all duration-300 border-gray-700 text-gray-500"; // Reset
+
+            if (hunger >= 7) {
+                die.classList.add('text-green-400', 'border-green-500');
+                die.style.boxShadow = '0 0 15px rgba(74, 222, 128, 0.3)';
+                document.getElementById('status-10').style.opacity = '1';
+            } else if (hunger >= 4) {
+                die.classList.add('text-yellow-400', 'border-yellow-500');
+                die.style.boxShadow = '0 0 15px rgba(250, 204, 21, 0.3)';
+                document.getElementById('status-6').style.opacity = '1';
+            } else if (hunger >= 1) {
+                die.classList.add('text-red-400', 'border-red-500');
+                die.style.boxShadow = '0 0 15px rgba(248, 113, 113, 0.4)';
+                document.getElementById('status-3').style.opacity = '1';
+            } else {
+                die.classList.add('text-red-600', 'border-red-700', 'animate-pulse');
+                document.getElementById('status-0').style.opacity = '1';
+            }
+        }
+
+        function addBuff() {
+            const name = prompt("Nombre del Buff/Mutación:");
+            if(name) {
+                const desc = prompt("Efecto (ej: +10 Fuerza):");
+                const list = document.getElementById('buff-list');
+                const li = document.createElement('li');
+                li.className = "flex justify-between items-center bg-[#1a1a1a] p-2 rounded border-l-2 border-gray-500 animate-[slideDown_0.2s_ease-out]";
+                li.innerHTML = `
+                    <div>
+                        <span class="block font-bold text-gray-200">${name}</span>
+                        <span class="text-[10px] text-gray-500">${desc}</span>
+                    </div>
+                    <button onclick="this.parentElement.remove()" class="text-gray-600 hover:text-red-500"><i class="fas fa-times"></i></button>
+                `;
+                list.appendChild(li);
+            }
         }
 
         initInventory();
-        updateHunger(0);
+        updateHunger(0); // Init visuals
     </script>
 </body>
 </html>
